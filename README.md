@@ -8,13 +8,11 @@ Bilingual (English / Arabic) self-assessment for Egypt's Personal Data Protectio
 
 ## Deploy
 
-- Vercel project `pdpl-readiness` (team mohamedtamim85): https://pdpl-readiness-mohamedtamim85.vercel.app
+- Vercel project `pdpl-readiness` in the **alphavitotsk** account, linked to this repo. Every push to the
+  production branch (`claude/nice-lamport-aqr9o9`, the repo default) deploys automatically.
+- Settings: no framework, no build command, output directory `public`, functions in `fra1`.
+- Env var: `DATABASE_URL` (Neon pooled connection string, marked sensitive).
 - Neon project `pdpl-readiness` (`morning-art-04146185`, AWS eu-central-1), table from `db/schema.sql`.
-- Env var on Vercel: `DATABASE_URL` (Neon pooled connection string, marked sensitive).
-
-The project is not linked to Git yet because the Vercel GitHub app has no access to `alphavitotsk`. Install it at
-https://github.com/apps/vercel/installations/select_target and connect the repo in Vercel → Project → Settings → Git;
-after that every push deploys automatically. Output directory: `public`, no build command.
 
 Read submissions in the Neon SQL editor:
 
