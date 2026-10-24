@@ -9,6 +9,48 @@ const FLAGS = ["sensitive", "children", "cloud", "mkt", "cctv", "web", "ai"];
 const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const normPhone = (v) => str(v, 40).replace(/[\s\-().]/g, "").replace(/^(\+|00)?20(?=1)/, "0");
 
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+// Emails each new lead to Alphavito through Resend. Failures are logged, never shown to the visitor:
+// the lead is already stored in Neon.
+async function notify(lead) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  const rows = [
+    ["Source", lead.source === "download" ? "Report download" : "Review request"],
+    ["Name", lead.name],
+    ["Mobile", lead.phone],
+    ["Email", lead.email],
+    ["Company", lead.profile.company],
+    ["Sector", lead.profile.sector],
+    ["Records", lead.profile.records.toLocaleString("en-US")],
+    ["Role", lead.profile.role],
+    ["Readiness score", `${lead.score}%`],
+    ["Open gaps", lead.gaps.length],
+    ["Language", lead.lang === "ar" ? "Arabic" : "English"],
+  ].filter(([, v]) => v !== "" && v != null);
+  const html = `<h2>New PDPL Readiness Check lead</h2><table cellpadding="6" style="border-collapse:collapse">${rows
+    .map(([k, v]) => `<tr><td style="color:#56626E">${esc(k)}</td><td><b>${esc(v)}</b></td></tr>`)
+    .join("")}</table>`;
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(5000),
+      body: JSON.stringify({
+        from: process.env.LEAD_FROM || "PDPL Readiness Check <pdpl@alphavito.com>",
+        to: (process.env.LEAD_NOTIFY_TO || "Sales@alphavito.com").split(",").map((x) => x.trim()),
+        reply_to: lead.email || undefined,
+        subject: `PDPL lead: ${lead.name}${lead.profile.company ? ` (${lead.profile.company})` : ""} — ${lead.score}%`,
+        html,
+      }),
+    });
+    if (!r.ok) console.error("lead email failed", r.status, await r.text());
+  } catch (err) {
+    console.error("lead email failed", err);
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -52,9 +94,10 @@ export default async function handler(req, res) {
       VALUES (${source}, ${name}, ${email || null}, ${phone || null}, ${profile.company || null}, ${profile.sector}, ${profile.records},
               ${profile.role}, ${b.lang === "ar" ? "ar" : "en"}, ${score}, ${gaps}, ${JSON.stringify(profile)}::jsonb,
               ${JSON.stringify(answers)}::jsonb, true, ${str(req.headers["user-agent"], 300)})`;
-    return res.status(201).json({ ok: true });
   } catch (err) {
     console.error("submit failed", err);
     return res.status(500).json({ error: "server_error" });
   }
+  await notify({ source, name, email, phone, profile, score, gaps, lang: b.lang });
+  return res.status(201).json({ ok: true });
 }

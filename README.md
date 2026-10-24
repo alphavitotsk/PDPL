@@ -11,7 +11,9 @@ Bilingual (English / Arabic) self-assessment for Egypt's Personal Data Protectio
 - Vercel project `pdpl-readiness` in the **alphavitotsk** account, linked to this repo. Every push to the
   production branch (`claude/nice-lamport-aqr9o9`, the repo default) deploys automatically.
 - Settings: no framework, no build command, output directory `public`, functions in `fra1`.
-- Env var: `DATABASE_URL` (Neon pooled connection string, marked sensitive).
+- Env vars: `DATABASE_URL` (Neon pooled connection string) and `RESEND_API_KEY` (lead emails), both sensitive.
+  Optional: `LEAD_NOTIFY_TO` (default `Sales@alphavito.com`, comma-separated) and `LEAD_FROM`
+  (default `PDPL Readiness Check <pdpl@alphavito.com>`; the domain must be verified in Resend).
 - Neon project `pdpl-readiness` (`morning-art-04146185`, AWS eu-central-1), table from `db/schema.sql`.
 
 Read submissions in the Neon SQL editor:
