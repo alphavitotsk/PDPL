@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDPL Readiness Check — Alphavito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --surface2:#EAEFF5; --ink:#14202C; --muted:#56626E; --line:#D7DFE8;
+  --navy:#0B1F3A; --orange:#E03D00; --orange-soft:#FFE9DF; --blue:#1366D6; --blue-soft:#E3EEFD;
+  --yes:#1366D6; --partial:#B26A00; --no:#C2410C;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0C141C; --surface:#141F2A; --surface2:#1B2835; --ink:#E6EDF3; --muted:#9AA8B5; --line:#2A3846;
+  --navy:#081624; --orange:#FF7A45; --orange-soft:#3A2116; --blue:#5AA2FF; --blue-soft:#14273F;
+  --yes:#5AA2FF; --partial:#F0B04A; --no:#FF8A5B; color-scheme:dark; }}
+:root[data-theme="dark"]{
+  --bg:#0C141C; --surface:#141F2A; --surface2:#1B2835; --ink:#E6EDF3; --muted:#9AA8B5; --line:#2A3846;
+  --navy:#081624; --orange:#FF7A45; --orange-soft:#3A2116; --blue:#5AA2FF; --blue-soft:#14273F;
+  --yes:#5AA2FF; --partial:#F0B04A; --no:#FF8A5B; color-scheme:dark; }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;font-size:16px;line-height:1.55}
+html[lang="ar"] body{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",Tahoma,sans-serif}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{background:var(--navy);color:#F3F6FA}
+header.top .wrap{display:flex;align-items:center;gap:16px;padding-top:14px;padding-bottom:14px}
+.logo{height:38px;width:auto;background:#FFFFFF;border-radius:8px;padding:5px 8px}
+.top .name{font-weight:600;font-size:15px;opacity:.9}
+.spacer{flex:1}
+.lang{background:transparent;border:1px solid rgba(255,255,255,.35);color:#F3F6FA;border-radius:8px;padding:6px 12px;cursor:pointer}
+.hero{background:var(--navy);color:#F3F6FA;padding:28px 0 40px}
+.hero h1{font-size:clamp(28px,4.4vw,44px);line-height:1.15;margin:0 0 12px;max-width:760px;font-weight:700}
+.hero p{margin:0;max-width:680px;color:#C5D2E1;font-size:17px}
+.clock{margin-top:22px;display:inline-flex;gap:14px;align-items:baseline;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 16px}
+.clock b{font-size:30px;color:#FF8A5B;font-variant-numeric:tabular-nums}
+.clock span{color:#C5D2E1;font-size:15px}
+.steps{display:flex;gap:8px;margin:-20px 0 22px;flex-wrap:wrap}
+.step{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:start;display:flex;gap:10px;align-items:center}
+.step .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);font-weight:700;font-size:14px;flex:none}
+.step[aria-current="step"]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.step[aria-current="step"] .n{background:var(--blue);color:#fff}
+.step .t{font-weight:600}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px}
+.f small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=number],select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+fieldset{border:0;margin:0;padding:0}
+legend{font-weight:600;font-size:15px;margin-bottom:8px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;background:var(--bg)}
+.seg input{accent-color:var(--blue)}
+.toggles{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.tg{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);cursor:pointer}
+.tg input{width:20px;height:20px;margin-top:2px;accent-color:var(--blue);flex:none}
+.tg b{display:block;font-weight:600}
+.tg span{color:var(--muted);font-size:14px}
+.notice{border-inline-start:4px solid var(--orange);background:var(--orange-soft);padding:12px 14px;border-radius:8px;margin-top:14px}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:11px 18px;font-weight:600;cursor:pointer}
+.btn.primary{background:var(--orange);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;gap:12px;align-items:center}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.bar{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .3s}
+.sec{margin-bottom:18px}
+.sec h2{font-size:20px;margin:6px 0 10px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+.q p{margin:0 0 10px;font-weight:500}
+.q .ref{color:var(--muted);font-size:13px;margin-top:8px}
+.ans{display:flex;flex-wrap:wrap;gap:8px}
+.ans button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14px}
+.ans button[aria-pressed="true"][data-v="yes"]{background:var(--yes);border-color:var(--yes);color:#fff}
+.ans button[aria-pressed="true"][data-v="partial"]{background:var(--partial);border-color:var(--partial);color:#fff}
+.ans button[aria-pressed="true"][data-v="no"],.ans button[aria-pressed="true"][data-v="unsure"]{background:var(--no);border-color:var(--no);color:#fff}
+.score{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.big{font-size:64px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.band{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:999px;font-weight:600;font-size:14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.fact{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.fact .k{color:var(--muted);font-size:13px}
+.fact .v{font-weight:700;font-size:18px}
+.rows{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.row{display:grid;grid-template-columns:minmax(150px,240px) 1fr 52px;gap:12px;align-items:center;font-size:15px}
+.row .bar{height:10px}
+.row b{text-align:end;font-variant-numeric:tabular-nums}
+h2.h{font-size:22px;margin:26px 0 10px}
+.act{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-inline-start:5px solid var(--line)}
+.act.p3{border-inline-start-color:var(--no)}.act.p2{border-inline-start-color:var(--partial)}.act.p1{border-inline-start-color:var(--blue)}
+.act .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:13px}
+.tag{border-radius:999px;padding:2px 10px;background:var(--surface2);font-weight:600}
+.act p{margin:4px 0}
+.act .ref{color:var(--muted);font-size:13px}
+.cta{background:var(--navy);color:#F3F6FA;border-radius:14px;padding:22px;margin-top:24px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.cta h3{margin:0 0 6px;font-size:20px}
+.cta p{margin:0;color:#C5D2E1}
+.cta .c{display:flex;gap:18px;flex-wrap:wrap;font-weight:600}
+.cta a{color:#FFB38F}
+.fine{color:var(--muted);font-size:13px;margin:22px 0 30px}
+.empty{color:var(--muted)}
+.pkg{display:grid;grid-template-columns:minmax(140px,200px) 1fr;gap:12px;font-size:15px;padding:8px 0;border-top:1px solid var(--line)}
+.pkg:first-child{border-top:0}
+input[type=email],input[type=tel]{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+@media (max-width:640px){.pkg{grid-template-columns:1fr;gap:2px}}
+@media (max-width:640px){.score{grid-template-columns:1fr}.row{grid-template-columns:1fr 46px}.row .bar{grid-column:1/-1;order:3}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<img class="logo" id="logo" alt="Alphavito Technology Solutions">
+<span class="name" data-t="brand"></span>
+<div class="spacer"></div>
+<button class="lang" id="lang" type="button"></button>
+</div></header>
+<section class="hero"><div class="wrap">
+<h1 data-t="h1"></h1>
+<p data-t="lead"></p>
+<div class="clock" id="clock"></div>
+</div></section>
+<main class="wrap">
+<nav class="steps" aria-label="Steps">
+<button class="step" data-go="0" type="button"><span class="n">1</span><span class="t" data-t="s1"></span></button>
+<button class="step" data-go="1" type="button"><span class="n">2</span><span class="t" data-t="s2"></span></button>
+<button class="step" data-go="2" type="button"><span class="n">3</span><span class="t" data-t="s3"></span></button>
+</nav>
+
+<section class="panel" id="p0">
+<div class="card">
+<div class="grid2">
+<label class="f"><span data-t="company"></span><input type="text" id="company" autocomplete="organization"><small data-t="companyHint"></small></label>
+<label class="f"><span data-t="sector"></span><select id="sector"></select></label>
+<label class="f"><span data-t="records"></span><input type="number" id="records" min="0" step="1000" inputmode="numeric"><small data-t="recordsHint"></small></label>
+<fieldset><legend data-t="role"></legend><div class="seg" id="role"></div></fieldset>
+</div>
+<h2 class="h" data-t="activities" style="margin-top:22px"></h2>
+<div class="toggles" id="toggles"></div>
+<div id="bankNote"></div>
+<div class="actions"><button class="btn primary" type="button" data-go="1" data-t="next1"></button></div>
+</div>
+</section>
+
+<section class="panel" id="p1">
+<div class="progress"><div class="bar"><i id="pbar"></i></div><span id="ptext"></span></div>
+<div id="qs"></div>
+<div class="actions"><button class="btn ghost" type="button" data-go="0" data-t="back"></button><button class="btn primary" type="button" data-go="2" data-t="next2"></button></div>
+</section>
+
+<section class="panel" id="p2">
+<div id="results"></div>
+</section>
+
+<div class="cta">
+<div style="flex:1;min-width:240px"><h3 data-t="ctaH"></h3><p data-t="ctaP"></p></div>
+<div class="c"><a href="https://www.alphavito.com" target="_blank" rel="noopener">www.alphavito.com</a><a href="mailto:Sales@alphavito.com">Sales@alphavito.com</a><span dir="ltr">01006527795</span></div>
+</div>
+<p class="fine" data-t="fine"></p>
+</main>
+<script>
+const SECTIONS = [
+ {id:"gov", en:"Licensing and registration", ar:"الترخيص والتسجيل"},
+ {id:"dpo", en:"Data Protection Officer", ar:"مسؤول حماية البيانات"},
+ {id:"ropa", en:"Data inventory and records", ar:"حصر البيانات والسجلات"},
+ {id:"basis", en:"Lawful basis and consent", ar:"الأساس القانوني والموافقة"},
+ {id:"trans", en:"Transparency and data lifecycle", ar:"الشفافية ودورة حياة البيانات"},
+ {id:"rights", en:"Data subject rights", ar:"حقوق أصحاب البيانات"},
+ {id:"sec", en:"Security controls", ar:"ضوابط الأمن"},
+ {id:"breach", en:"Breach response", ar:"الاستجابة للخروقات"},
+ {id:"vendors", en:"Vendors and transfers abroad", ar:"الموردون والنقل عبر الحدود"},
+ {id:"sens", en:"Sensitive and children’s data", ar:"البيانات الحساسة وبيانات الأطفال"},
+ {id:"mkt", en:"Electronic direct marketing", ar:"التسويق الإلكتروني المباشر"},
+ {id:"cctv", en:"Video surveillance (CCTV)", ar:"كاميرات المراقبة"},
+ {id:"web", en:"Website and apps", ar:"المواقع والتطبيقات"},
+ {id:"ai", en:"AI and analytics", ar:"الذكاء الاصطناعي والتحليلات"}
+];
+// w: 3 critical, 2 high, 1 medium. when: applicability on profile.
+const QUESTIONS = [
+ {id:"q1",s:"gov",w:2,svc:"D1",
+  en:"Is your legal entity registered on the PDPC portal (Digital Egypt identity, commercial registration number, authorised signatory)?",
+  ar:"هل سجّلت كيانك القانوني على بوابة المركز (هوية مصر الرقمية، رقم السجل التجاري، مفوض بالتوقيع)؟",
+  aen:"Create a Digital Egypt identity for the legal representative, open a PDPC portal account and register the entity with its commercial registration number.",
+  aar:"أنشئ هوية مصر الرقمية للممثل القانوني، وافتح حسابًا على بوابة المركز، وسجّل الكيان برقم السجل التجاري.",
+  ref:"PDPC portal: Register a Legal Entity; ER Art. 36"},
+ {id:"q2",s:"gov",w:3,svc:"D1",
+  en:"Have you applied for, or obtained, the general PDPC licence (controller/processor, controller or processor)?",
+  ar:"هل تقدمت بطلب ترخيص المركز العام (متحكم/معالج، أو متحكم، أو معالج) أو حصلت عليه؟",
+  aen:"Complete the portal’s Company Journey questionnaire and submit the general licence file now: decisions take up to 90 working days and silence counts as refusal.",
+  aar:"أكمل استبيان رحلة الشركة على البوابة وقدّم ملف الترخيص العام الآن، فالبت قد يستغرق حتى 90 يوم عمل وعدم الرد يُعد رفضًا.",
+  ref:"Law Arts. 4(10), 5(11), 26; ER Arts. 2(1), 19, 21, 35–36"},
+ {id:"q3",s:"gov",w:3,svc:"D1",when:p=>p.cloud||p.cctv||p.mkt,
+  en:"Do you hold the supplementary licences your activities need (cross-border transfer, CCTV, e-marketing)?",
+  ar:"هل لديك التراخيص التكميلية التي تتطلبها أنشطتك (النقل عبر الحدود، كاميرات المراقبة، التسويق الإلكتروني)؟",
+  aen:"Apply for each supplementary licence after the general one: they are invalid without it.",
+  aar:"تقدّم لكل ترخيص تكميلي بعد الترخيص العام، فهي غير سارية بدونه.",
+  ref:"Law Arts. 14, 17; ER Arts. 16, 27, 29, 31; Licenses and Permits Guidelines"},
+ {id:"q4",s:"gov",w:1,svc:"D1",
+  en:"Do you track licence renewal dates and growth in record numbers that would move you to a higher fee tier?",
+  ar:"هل تتابع مواعيد تجديد الترخيص وزيادة عدد السجلات التي قد تنقلك إلى شريحة رسوم أعلى؟",
+  aen:"Set renewal reminders (licences 3 months before expiry, permits 1 month) and review record counts every quarter.",
+  aar:"اضبط تذكيرات التجديد (الترخيص قبل 3 أشهر، والتصريح قبل شهر) وراجع عدد السجلات كل ربع سنة.",
+  ref:"ER Arts. 39–40"},
+ {id:"q5",s:"dpo",w:3,svc:"D2",
+  en:"Have you appointed a DPO registered with the PDPC in the category that matches your record count?",
+  ar:"هل عيّنت مسؤول حماية بيانات مقيدًا لدى المركز في الفئة المناسبة لعدد سجلاتك؟",
+  aen:"Appoint an internal, external or shared DPO who has passed the PDPC exam for the right category (C, B or A).",
+  aar:"عيّن مسؤول حماية داخليًا أو خارجيًا أو مشتركًا اجتاز اختبار المركز للفئة المناسبة (C أو B أو A).",
+  ref:"Law Art. 8; ER Arts. 7–9; DPO Categories Guidelines"},
+ {id:"q6",s:"dpo",w:2,svc:"D2",
+  en:"Is the appointment submitted on the portal with a signed appointment letter, and does the DPO contract guarantee independence?",
+  ar:"هل قُدّم التعيين على البوابة بخطاب تعيين موقّع، وهل يضمن عقد مسؤول الحماية استقلاليته؟",
+  aen:"Submit the signed appointment letter through Assign DPO and add an independence clause to the DPO contract.",
+  aar:"قدّم خطاب التعيين الموقّع عبر خدمة تعيين مسؤول الحماية، وأضف بند الاستقلالية إلى عقده.",
+  ref:"ER Art. 21(5); PDPC portal: Assign DPO; DPO Guidelines"},
+ {id:"q7",s:"dpo",w:1,svc:"D2",
+  en:"Is the DPO’s contact published (for example dpo@yourcompany) and does the DPO report to top management?",
+  ar:"هل بيانات التواصل مع مسؤول الحماية منشورة (مثل dpo@company)، وهل يرفع تقاريره للإدارة العليا؟",
+  aen:"Publish a generic DPO email in privacy notices and set a direct reporting line to management.",
+  aar:"انشر بريدًا عامًا لمسؤول الحماية في إشعارات الخصوصية، وحدد له خط إبلاغ مباشر للإدارة.",
+  ref:"Law Art. 9; DPO Guidelines"},
+ {id:"q8",s:"dpo",w:2,svc:"D2",
+  en:"Does the DPO run periodic assessments and prepare the annual privacy report for the PDPC?",
+  ar:"هل يجري مسؤول الحماية تقييمات دورية ويعد التقرير السنوي لحالة الخصوصية للمركز؟",
+  aen:"Schedule periodic reviews and the annual privacy-status report; a new DPO must report within 15 days.",
+  aar:"جدول المراجعات الدورية والتقرير السنوي، ويقدم المسؤول البديل تقريرًا خلال 15 يومًا.",
+  ref:"Law Art. 9(1); ER Art. 12"},
+ {id:"q9",s:"ropa",w:2,svc:"A1",
+  en:"Do you have a complete inventory of the systems, applications and files that hold personal data?",
+  ar:"هل لديك حصر كامل للأنظمة والتطبيقات والملفات التي تحتوي على بيانات شخصية؟",
+  aen:"Run an asset inventory and data discovery across servers, SaaS, file shares, endpoints and backups.",
+  aar:"نفّذ حصرًا للأصول واكتشافًا للبيانات عبر الخوادم والخدمات السحابية ومجلدات الملفات والأجهزة والنسخ الاحتياطية.",
+  ref:"Law Art. 4(9); RoPA Guidelines steps a–e"},
+ {id:"q10",s:"ropa",w:3,svc:"A2",when:p=>p.role!=="processor",
+  en:"Do you maintain a controller Record of Processing Activities (RoPA)?",
+  ar:"هل تحتفظ بسجل أنشطة المعالجة بصفتك متحكمًا؟",
+  aen:"Build the RoPA using the PDPC controller template (26 fields) and keep it in a secure electronic register.",
+  aar:"أعد سجل المعالجة وفق نموذج المركز للمتحكم (26 حقلًا) واحفظه في سجل إلكتروني مؤمن.",
+  ref:"Law Art. 4(9); ER Arts. 2–3; RoPA Guidelines"},
+ {id:"q11",s:"ropa",w:3,svc:"A2",when:p=>p.role!=="controller",
+  en:"Do you maintain a processor RoPA for the processing you do on behalf of clients?",
+  ar:"هل تحتفظ بسجل معالجة بصفتك معالجًا للبيانات التي تعالجها لصالح عملائك؟",
+  aen:"Build the processor RoPA (PDPC template, 16 fields) including contracts, transfer routes and deletion dates.",
+  aar:"أعد سجل المعالج (نموذج المركز، 16 حقلًا) متضمنًا العقود ومسارات النقل وتواريخ المحو.",
+  ref:"Law Art. 5(9); ER Art. 4"},
+ {id:"q12",s:"ropa",w:1,svc:"A1",
+  en:"Do you know how many personal data records you hold per category?",
+  ar:"هل تعرف عدد سجلات البيانات الشخصية لديك لكل فئة؟",
+  aen:"Count records per category; the count sets your licence fee tier and DPO category.",
+  aar:"احسب السجلات لكل فئة، فالعدد يحدد شريحة رسوم الترخيص وفئة مسؤول الحماية.",
+  ref:"ER Art. 19; DPO Categories Guidelines"},
+ {id:"q13",s:"basis",w:3,svc:"A2",
+  en:"Is a lawful basis documented for every processing activity (consent, contract, legal obligation, legitimate interest, legal claims, court order)?",
+  ar:"هل الأساس القانوني موثق لكل نشاط معالجة (موافقة، عقد، التزام قانوني، مصلحة مشروعة، مطالبة قانونية، حكم قضائي)؟",
+  aen:"Record the lawful basis per activity in the RoPA; use consent only where people have a real choice.",
+  aar:"سجّل الأساس القانوني لكل نشاط في سجل المعالجة، واستخدم الموافقة فقط حين يكون للشخص خيار حقيقي.",
+  ref:"Law Art. 6; Lawful Bases Guidelines"},
+ {id:"q14",s:"basis",w:2,svc:"C4",
+  en:"Where you rely on legitimate interest, have you documented a legitimate interest assessment?",
+  ar:"عند الاعتماد على المصلحة المشروعة، هل وثقت تقييمًا للمصلحة المشروعة؟",
+  aen:"Run and document an LIA covering legitimacy, necessity and proportionality.",
+  aar:"أجرِ ووثّق تقييمًا يغطي المشروعية والضرورة والتناسب.",
+  ref:"Law Art. 6(4); Lawful Bases Guidelines"},
+ {id:"q15",s:"basis",w:3,svc:"A3",
+  en:"Are consent requests in Arabic, opt-in (no pre-ticked boxes), granular per purpose and separate from terms?",
+  ar:"هل طلبات الموافقة بالعربية، وبفعل إيجابي (دون مربعات محددة مسبقًا)، ومفصلة لكل غرض، ومنفصلة عن الشروط؟",
+  aen:"Redesign consent forms to Consent Guidelines standards and document the mechanism for Center approval.",
+  aar:"أعد تصميم نماذج الموافقة وفق إرشادات المركز، ووثّق آلية الموافقة لاعتمادها من المركز.",
+  ref:"Law Art. 2; ER Art. 2(2)–(3); Consent Guidelines"},
+ {id:"q16",s:"basis",w:2,svc:"A2",
+  en:"Are consents recorded in a secure electronic register (who, when, what wording, how, withdrawal)?",
+  ar:"هل تُسجَّل الموافقات في سجل إلكتروني مؤمن (من، ومتى، وبأي صيغة، وكيف، والعدول)؟",
+  aen:"Store every consent with its date, wording version and form, and log withdrawals.",
+  aar:"احفظ كل موافقة بتاريخها وصيغتها وشكلها، وسجّل حالات العدول.",
+  ref:"ER Art. 2 (second, 3)"},
+ {id:"q17",s:"basis",w:2,svc:"A3",
+  en:"Can people withdraw consent as easily as they gave it, with the withdrawal applied in all systems?",
+  ar:"هل يستطيع الأشخاص سحب موافقتهم بالسهولة نفسها التي أعطوها بها، مع تطبيق السحب في كل الأنظمة؟",
+  aen:"Add a one-step withdrawal option on every channel and sync it to CRM, marketing and third parties.",
+  aar:"أضف خيار سحب بخطوة واحدة في كل قناة، وزامنه مع أنظمة العملاء والتسويق والأطراف الأخرى.",
+  ref:"Law Art. 2(2); Consent Guidelines"},
+ {id:"q18",s:"trans",w:3,svc:"A6",
+  en:"Do you give Arabic privacy notices at collection, covering all required items (identity, DPO, purposes, basis, recipients, transfers, retention, rights, complaint to the PDPC)?",
+  ar:"هل تقدم إشعارات خصوصية بالعربية عند الجمع تغطي كل العناصر المطلوبة (الهوية، مسؤول الحماية، الأغراض، الأساس، المستلمون، النقل، الاحتفاظ، الحقوق، الشكوى للمركز)؟",
+  aen:"Write layered privacy notices per audience (customers, staff, applicants, vendors) and show them at every collection point.",
+  aar:"اكتب إشعارات خصوصية متعددة الطبقات لكل فئة (عملاء، موظفون، متقدمون، موردون) واعرضها عند كل نقطة جمع.",
+  ref:"Law Art. 2; ER Art. 2 (second, 1); Privacy Notice Guidelines"},
+ {id:"q19",s:"trans",w:3,svc:"A5",
+  en:"Is there a retention schedule per data category that is enforced, with deletion logs?",
+  ar:"هل يوجد جدول احتفاظ لكل فئة بيانات يُطبق فعليًا، مع سجلات للمحو؟",
+  aen:"Define retention per category, automate deletion or anonymisation and keep deletion logs.",
+  aar:"حدد مدة الاحتفاظ لكل فئة، وأتمت المحو أو إخفاء الهوية، واحتفظ بسجلات المحو.",
+  ref:"Law Arts. 3(4), 4(7); ER Art. 3(4)"},
+ {id:"q20",s:"trans",w:2,svc:"A1",
+  en:"Have you reviewed forms and systems so you collect only the data each purpose needs?",
+  ar:"هل راجعت النماذج والأنظمة بحيث تجمع فقط البيانات اللازمة لكل غرض؟",
+  aen:"Remove unnecessary fields from forms and stop collecting data you do not use.",
+  aar:"احذف الحقول غير الضرورية من النماذج وأوقف جمع البيانات غير المستخدمة.",
+  ref:"Law Art. 3; Data Protection Principles Guidelines"},
+ {id:"q21",s:"rights",w:3,svc:"A4",
+  en:"Do you have a channel and procedure to receive rights requests and reply within 6 working days?",
+  ar:"هل لديك قناة وإجراء لتلقي طلبات الحقوق والرد عليها خلال 6 أيام عمل؟",
+  aen:"Set up a request form and DPO mailbox with a ticket workflow that tracks the 6-working-day deadline.",
+  aar:"أنشئ نموذج طلب وبريدًا لمسؤول الحماية مع نظام تذاكر يتابع مهلة 6 أيام العمل.",
+  ref:"Law Arts. 2, 32; ER Art. 3(5)"},
+ {id:"q22",s:"rights",w:2,svc:"A4",
+  en:"Do you verify the requester’s identity and log every request and its outcome?",
+  ar:"هل تتحقق من هوية مقدم الطلب وتسجل كل طلب ونتيجته؟",
+  aen:"Add proportionate identity checks and a request log with dates, decisions and reasons.",
+  aar:"أضف تحققًا متناسبًا من الهوية وسجلًا للطلبات بالتواريخ والقرارات والأسباب.",
+  ref:"ER Art. 3 (second, 5)"},
+ {id:"q23",s:"rights",w:2,svc:"A4",
+  en:"Can you find, export, correct and delete one person’s data across all your systems?",
+  ar:"هل يمكنك العثور على بيانات شخص واحد وتصديرها وتصحيحها ومحوها في كل أنظمتك؟",
+  aen:"Map where each data type lives and write runbooks for export, correction and deletion.",
+  aar:"حدد مكان كل نوع من البيانات، واكتب إجراءات للتصدير والتصحيح والمحو.",
+  ref:"Law Art. 2; Data Users Guidelines"},
+ {id:"q24",s:"sec",w:3,svc:"B1",
+  en:"Do systems with personal data use multi-factor authentication and role-based access, with periodic access reviews?",
+  ar:"هل تستخدم الأنظمة التي بها بيانات شخصية التحقق متعدد العوامل والصلاحيات حسب الدور مع مراجعات دورية؟",
+  aen:"Enable MFA, apply least-privilege roles and review access every quarter.",
+  aar:"فعّل التحقق متعدد العوامل، وطبق أقل صلاحيات لازمة، وراجع الصلاحيات كل ربع سنة.",
+  ref:"Law Arts. 4(6), 5(7); ER Arts. 3–4"},
+ {id:"q25",s:"sec",w:3,svc:"B2",
+  en:"Is personal data encrypted at rest and in transit, including laptops and backups?",
+  ar:"هل البيانات الشخصية مشفرة أثناء التخزين والنقل، بما في ذلك الحواسيب المحمولة والنسخ الاحتياطية؟",
+  aen:"Encrypt disks, databases, backups and all transfers; mask data in test systems.",
+  aar:"شفّر الأقراص وقواعد البيانات والنسخ الاحتياطية وكل عمليات النقل، وأخفِ البيانات في بيئات الاختبار.",
+  ref:"ER Art. 3 (second, 2), Art. 4 (second, 1)"},
+ {id:"q26",s:"sec",w:2,svc:"B4",
+  en:"Are systems with personal data behind a next-generation firewall, on segmented networks, with secure remote access?",
+  ar:"هل الأنظمة التي بها بيانات شخصية محمية بجدار حماية من الجيل التالي وشبكات مقسمة ووصول آمن عن بعد؟",
+  aen:"Deploy a next-generation firewall with intrusion prevention, segment database, HR, finance and CCTV networks, and use VPN or zero-trust remote access.",
+  aar:"طبّق جدار حماية من الجيل التالي مع منع التسلل، وافصل شبكات قواعد البيانات والموارد البشرية والمالية والكاميرات، واستخدم VPN أو وصولًا بمبدأ انعدام الثقة.",
+  ref:"ER Art. 3 (second, 3)"},
+ {id:"q27",s:"sec",w:2,svc:"B8",
+  en:"Are backups tested regularly, with an offline or immutable copy?",
+  ar:"هل تُختبر النسخ الاحتياطية بانتظام مع نسخة غير متصلة أو غير قابلة للتعديل؟",
+  aen:"Keep a 3-2-1 backup with an immutable copy and test restores every quarter.",
+  aar:"احتفظ بنسخ احتياطية 3-2-1 مع نسخة غير قابلة للتعديل، واختبر الاستعادة كل ربع سنة.",
+  ref:"ER Art. 3 (second, 4), Art. 4 (second, 2)"},
+ {id:"q28",s:"sec",w:2,svc:"B6",
+  en:"Do you collect logs centrally and get alerts that would reveal a breach?",
+  ar:"هل تجمع السجلات مركزيًا وتتلقى تنبيهات تكشف أي خرق؟",
+  aen:"Centralise logs (SIEM or managed detection) with alerts for mass export and ransomware.",
+  aar:"اجمع السجلات مركزيًا (SIEM أو رصد مُدار) مع تنبيهات للتصدير الكبير وبرمجيات الفدية.",
+  ref:"Law Art. 7; ER Art. 5"},
+ {id:"q29",s:"sec",w:2,svc:"D2",
+  en:"Are staff trained on data protection and bound by confidentiality undertakings?",
+  ar:"هل الموظفون مدربون على حماية البيانات وموقعون على تعهدات بالسرية؟",
+  aen:"Run role-based training, keep attendance records and collect signed confidentiality undertakings.",
+  aar:"نفّذ تدريبًا حسب الدور، واحتفظ بسجلات الحضور، واجمع تعهدات السرية الموقعة.",
+  ref:"Law Art. 9(8); ER Arts. 2(5), 3(9)"},
+ {id:"q30",s:"breach",w:3,svc:"B7",
+  en:"Do you have an incident plan to notify the PDPC within 72 hours and affected people within 3 working days?",
+  ar:"هل لديك خطة للحوادث لإبلاغ المركز خلال 72 ساعة والأشخاص المتأثرين خلال 3 أيام عمل؟",
+  aen:"Write the incident response plan with roles, templates in Arabic and English, and run a drill.",
+  aar:"اكتب خطة الاستجابة للحوادث بالأدوار ونماذج بالعربية والإنجليزية، ونفّذ تمرينًا.",
+  ref:"Law Art. 7; ER Arts. 5–6"},
+ {id:"q31",s:"breach",w:2,svc:"A2",
+  en:"Do you keep a secure electronic breach register?",
+  ar:"هل تحتفظ بسجل إلكتروني مؤمن للخروقات؟",
+  aen:"Log every breach with discovery and report times, cause, volume, impact and corrective action.",
+  aar:"سجّل كل خرق بتوقيت العلم والإبلاغ والسبب والحجم والأثر والإجراء التصحيحي.",
+  ref:"ER Art. 5"},
+ {id:"q32",s:"vendors",w:3,svc:"C3",
+  en:"Do all vendors that handle personal data have data processing agreements?",
+  ar:"هل لدى كل الموردين الذين يتعاملون مع البيانات الشخصية اتفاقيات معالجة بيانات؟",
+  aen:"Sign processing agreements covering scope, security, audit, breach notice, deletion and sub-processors.",
+  aar:"وقّع اتفاقيات معالجة تغطي النطاق والأمن والتدقيق والإبلاغ عن الخرق والمحو والمعالجين الفرعيين.",
+  ref:"Law Art. 5; Data Users Guidelines"},
+ {id:"q33",s:"vendors",w:2,svc:"C1",
+  en:"Do you know where every system stores data, including SaaS and cloud services?",
+  ar:"هل تعرف أين يخزن كل نظام البيانات، بما في ذلك الخدمات السحابية؟",
+  aen:"Audit SaaS and cloud tools and keep a register of storage locations and transfers.",
+  aar:"راجع الخدمات السحابية واحتفظ بسجل لأماكن التخزين وعمليات النقل.",
+  ref:"Law Art. 14; ER Arts. 16, 24"},
+ {id:"q34",s:"vendors",w:3,svc:"C1",when:p=>p.cloud,
+  en:"For data stored or processed outside Egypt, do you have a transfer licence, a transfer impact assessment and consent where required?",
+  ar:"للبيانات المخزنة أو المعالجة خارج مصر، هل لديك ترخيص نقل وتقييم لأثر النقل وموافقة حيث يلزم؟",
+  aen:"Run a TIA per destination, collect consent where required and apply for the transfer licence naming each country.",
+  aar:"أجرِ تقييمًا لأثر النقل لكل وجهة، واجمع الموافقة حيث يلزم، وتقدّم لترخيص النقل محددًا كل دولة.",
+  ref:"Law Arts. 14–16, 42; ER Arts. 16–17, 24–27"},
+ {id:"q35",s:"sens",w:3,svc:"A3",when:p=>p.sensitive,
+  en:"For sensitive data (health, biometric, financial, religious, political, security), do you have written explicit consent and a licence covering it?",
+  ar:"للبيانات الحساسة (صحية، حيوية، مالية، دينية، سياسية، أمنية)، هل لديك موافقة كتابية صريحة وترخيص يغطيها؟",
+  aen:"Collect written consent (paper or electronic), limit data to what is essential and include sensitive data in the licence.",
+  aar:"اجمع موافقة كتابية (ورقية أو إلكترونية)، واقصر البيانات على الأساسي، وأدرج البيانات الحساسة في الترخيص.",
+  ref:"Law Arts. 12, 41; ER Art. 14"},
+ {id:"q36",s:"sens",w:3,svc:"A3",when:p=>p.children,
+  en:"For children’s data, do you have written guardian consent with a time scope, and do you avoid profiling or tracking children?",
+  ar:"لبيانات الأطفال، هل لديك موافقة كتابية من ولي الأمر بنطاق زمني، وهل تتجنب تصنيف الأطفال أو تتبعهم؟",
+  aen:"Collect guardian consent (written, with duration) for under-15s and guardian consent for 15–18; disable profiling.",
+  aar:"اجمع موافقة ولي الأمر (كتابية ومحددة المدة) لمن هم دون 15 عامًا، وموافقته لمن بين 15 و18، وأوقف التصنيف.",
+  ref:"Law Art. 12; ER Arts. 14(5), 15"},
+ {id:"q37",s:"sens",w:2,svc:"C4",when:p=>p.sensitive||p.children||p.cctv,
+  en:"Have you completed a data protection impact assessment (DPIA) for high-risk processing?",
+  ar:"هل أجريت تقييم أثر حماية البيانات للمعالجة عالية المخاطر؟",
+  aen:"Run a DPIA for sensitive data, children’s data, CCTV and new technology, and keep it for the PDPC.",
+  aar:"أجرِ تقييم أثر للبيانات الحساسة وبيانات الأطفال وكاميرات المراقبة والتقنيات الجديدة، واحتفظ به للمركز.",
+  ref:"Data Users Guidelines 3.7"},
+ {id:"q38",s:"mkt",w:3,svc:"A7",when:p=>p.mkt,
+  en:"Do you have prior explicit consent for marketing messages and a suppression list shared with all senders?",
+  ar:"هل لديك موافقة صريحة مسبقة على الرسائل التسويقية وقائمة استبعاد مشتركة مع كل جهات الإرسال؟",
+  aen:"Send marketing only to consenting contacts, keep a central suppression list and obtain the EDM licence.",
+  aar:"أرسل التسويق فقط لمن وافقوا، واحتفظ بقائمة استبعاد مركزية، واحصل على ترخيص التسويق الإلكتروني.",
+  ref:"Law Arts. 17, 43; ER Arts. 18, 29–30"},
+ {id:"q39",s:"mkt",w:2,svc:"A7",when:p=>p.mkt,
+  en:"Do messages show who created and sent them, include an opt-out of at most two steps, and are records kept for 3 years?",
+  ar:"هل تُظهر الرسائل منشئها ومرسلها، وتتضمن إلغاء اشتراك بخطوتين على الأكثر، وتُحفظ السجلات 3 سنوات؟",
+  aen:"Add standard footers with identity, contact and one-click opt-out; keep consent and campaign records 3 years.",
+  aar:"أضف تذييلًا موحدًا بالهوية ووسيلة التواصل وإلغاء الاشتراك بنقرة، واحفظ سجلات الموافقة والحملات 3 سنوات.",
+  ref:"Law Arts. 17–18; EDM Guidelines"},
+ {id:"q40",s:"cctv",w:3,svc:"C2",when:p=>p.cctv,
+  en:"Do you have a CCTV licence or permit, visible signage, facial recognition switched off, and footage kept in Egypt?",
+  ar:"هل لديك ترخيص أو تصريح لكاميرات المراقبة، ولافتات ظاهرة، وتمييز الوجه متوقف، والتسجيلات داخل مصر؟",
+  aen:"Apply for the CCTV licence (EGP 1,000 per 3 years) or permit (EGP 500 a year), add signage and disable facial recognition.",
+  aar:"تقدّم لترخيص الكاميرات (1,000 جنيه لكل 3 سنوات) أو التصريح (500 جنيه سنويًا)، وضع لافتات، وأوقف تمييز الوجه.",
+  ref:"ER Art. 31"},
+ {id:"q41",s:"web",w:2,svc:"A6",when:p=>p.web,
+  en:"Does your website use a cookie banner with non-essential cookies off by default, granular choices and stored preferences?",
+  ar:"هل يستخدم موقعك شريط موافقة على الكوكيز مع إيقاف غير الضروري افتراضيًا وخيارات مفصلة وحفظ التفضيلات؟",
+  aen:"Deploy a consent management tool that blocks non-essential tags until consent is given.",
+  aar:"طبّق أداة لإدارة الموافقة تمنع الأدوات غير الضرورية حتى تُعطى الموافقة.",
+  ref:"Compliance Checklist XI; EDM Guidelines"},
+ {id:"q42",s:"web",w:1,svc:"A6",when:p=>p.web,
+  en:"Is a privacy notice linked on every page, and do online forms collect only necessary fields?",
+  ar:"هل إشعار الخصوصية مرتبط بكل صفحة، وهل تجمع النماذج الإلكترونية الحقول الضرورية فقط؟",
+  aen:"Link the privacy notice in the footer and next to every form; remove optional fields you do not need.",
+  aar:"أضف رابط إشعار الخصوصية في التذييل وبجوار كل نموذج، واحذف الحقول غير الضرورية.",
+  ref:"Privacy Notice Guidelines; Compliance Checklist XI"},
+ {id:"q43",s:"sec",w:2,svc:"B5",
+  en:"Is every laptop, server and phone that touches personal data protected with endpoint detection, patch management and remote wipe?",
+  ar:"هل كل حاسوب وخادم وهاتف يتعامل مع بيانات شخصية محمي برصد الأجهزة وإدارة التحديثات والمحو عن بعد؟",
+  aen:"Deploy endpoint detection and response, a patch and vulnerability cycle, mobile device management with remote wipe and secure baselines.",
+  aar:"طبّق حماية الأجهزة مع الرصد والاستجابة، ودورة للتحديثات والثغرات، وإدارة الأجهزة المحمولة مع المحو عن بعد، وإعدادات أمان قياسية.",
+  ref:"Law Art. 5(7); ER Arts. 2 (second, 2), 4 (second, 1)"},
+ {id:"q44",s:"sec",w:2,svc:"B3",
+  en:"Do you control personal data leaving by email, web upload, USB or messaging (DLP, encrypted email, anti-phishing)?",
+  ar:"هل تتحكم في خروج البيانات الشخصية عبر البريد أو الرفع على الويب أو USB أو المراسلة (منع تسرب البيانات، بريد مشفر، مكافحة التصيد)؟",
+  aen:"Apply DLP policies keyed to data classification, encrypt sensitive email, control removable media and harden email against phishing and spoofing.",
+  aar:"طبّق سياسات منع التسرب حسب تصنيف البيانات، وشفّر البريد الحساس، وتحكم في الوسائط القابلة للإزالة، وأمّن البريد ضد التصيد والانتحال.",
+  ref:"Law Arts. 4(5), 5(5), 36, 41; ER Arts. 2(5), 3(9)"},
+ {id:"q45",s:"sec",w:2,svc:"C4",
+  en:"Do you run periodic vulnerability scans and penetration tests on systems that hold personal data?",
+  ar:"هل تجري فحصًا دوريًا للثغرات واختبارات اختراق للأنظمة التي تحتوي على بيانات شخصية؟",
+  aen:"Scan for vulnerabilities monthly, penetration-test external systems and critical applications yearly, and track remediation.",
+  aar:"افحص الثغرات شهريًا، واختبر اختراق الأنظمة الخارجية والتطبيقات الحرجة سنويًا، وتابع المعالجة.",
+  ref:"ER Art. 3 (second, 1); Data Users Guidelines 3.11"},
+ {id:"q46",s:"sec",w:1,svc:"B8",when:p=>!p.cloud,
+  en:"Are backups kept inside Egypt, with documented recovery objectives and a disaster recovery plan?",
+  ar:"هل النسخ الاحتياطية محفوظة داخل مصر، مع أهداف استعادة موثقة وخطة للتعافي من الكوارث؟",
+  aen:"Keep backup targets in Egypt (or hold a transfer licence), document recovery objectives and maintain a tested DR plan.",
+  aar:"احتفظ بالنسخ الاحتياطية داخل مصر (أو احصل على ترخيص نقل)، ووثّق أهداف الاستعادة، واحتفظ بخطة تعافٍ مختبرة.",
+  ref:"ER Arts. 3 (second, 4), 4 (second, 2), 35(10)"},
+ {id:"q47",s:"vendors",w:2,svc:"C3",
+  en:"Do you assess vendors before onboarding (security questionnaire, certifications) and re-assess high-risk vendors every year?",
+  ar:"هل تقيّم الموردين قبل التعاقد (استبيان أمني، شهادات) وتعيد تقييم الموردين عاليي المخاطر سنويًا؟",
+  aen:"Keep a vendor register linked to the RoPA, use a risk-tiered questionnaire, and run onboarding and offboarding checklists.",
+  aar:"احتفظ بسجل موردين مرتبط بسجل المعالجة، واستخدم استبيانًا حسب المخاطر، وقوائم تحقق للتعاقد وإنهاء التعاقد.",
+  ref:"Law Art. 5; Data Users Guidelines 2, 3.12"},
+ {id:"q48",s:"gov",w:2,svc:"D1",
+  en:"Is the infrastructure section of the licence file ready (data-centre classification, equipment, storage method, security certifications)?",
+  ar:"هل قسم البنية التحتية في ملف الترخيص جاهز (تصنيف مركز البيانات، المعدات، طريقة التخزين، شهادات الأمن)؟",
+  aen:"Prepare the ER Art. 35 infrastructure section and collect certificates with issuer, date and validity (for example ISO/IEC 27001 or 27701).",
+  aar:"أعد قسم البنية التحتية وفق المادة 35 من اللائحة، واجمع الشهادات بجهة الإصدار والتاريخ والصلاحية (مثل ISO/IEC 27001 أو 27701).",
+  ref:"ER Art. 35(7), (10)–(11)"},
+ {id:"q49",s:"ai",w:2,svc:"C5",when:p=>p.ai,
+  en:"For AI and analytics that use personal data, do you keep a use-case register and run a DPIA before training or automated decisions?",
+  ar:"للذكاء الاصطناعي والتحليلات التي تستخدم بيانات شخصية، هل تحتفظ بسجل لحالات الاستخدام وتجري تقييم أثر قبل التدريب أو القرارات الآلية؟",
+  aen:"Inventory AI and analytics use cases with purpose, data sources and retention, and run a DPIA for model training and automated decisions.",
+  aar:"احصر حالات استخدام الذكاء الاصطناعي والتحليلات بالغرض ومصادر البيانات ومدة الاحتفاظ، وأجرِ تقييم أثر لتدريب النماذج والقرارات الآلية.",
+  ref:"ER Art. 4(6)–(7)"},
+ {id:"q50",s:"ai",w:2,svc:"C5",when:p=>p.ai,
+  en:"Is training and analytics data minimised and pseudonymised, and do you control uploads of personal data to public AI tools?",
+  ar:"هل بيانات التدريب والتحليل مقلصة ومُرمّزة، وهل تتحكم في رفع البيانات الشخصية إلى أدوات الذكاء الاصطناعي العامة؟",
+  aen:"Pseudonymise training data, publish an acceptable-use policy for AI tools and block personal data uploads to unapproved services.",
+  aar:"رمّز بيانات التدريب، وانشر سياسة استخدام مقبول لأدوات الذكاء الاصطناعي، وامنع رفع البيانات الشخصية إلى خدمات غير معتمدة.",
+  ref:"ER Art. 4(6)(c), 4(7)"}
+];
+const SERVICES = {
+ A1:{en:"Data discovery and classification",ar:"حصر البيانات وتصنيفها"},
+ A2:{en:"Compliance registers platform",ar:"منصة سجلات الامتثال"},
+ A3:{en:"Consent and preference management",ar:"إدارة الموافقة والتفضيلات"},
+ A4:{en:"Data subject request portal and workflow",ar:"بوابة وسير عمل طلبات أصحاب البيانات"},
+ A5:{en:"Retention, deletion and secure disposal",ar:"الاحتفاظ والمحو والإتلاف الآمن"},
+ A6:{en:"Website and app privacy engineering",ar:"هندسة خصوصية المواقع والتطبيقات"},
+ A7:{en:"Marketing technology compliance",ar:"امتثال تقنيات التسويق"},
+ B1:{en:"Identity and access management",ar:"إدارة الهوية والوصول"},
+ B2:{en:"Encryption, pseudonymisation and key management",ar:"التشفير والترميز وإدارة المفاتيح"},
+ B3:{en:"Data loss prevention and secure communications",ar:"منع تسرب البيانات والاتصالات الآمنة"},
+ B4:{en:"Network and perimeter security",ar:"أمن الشبكة والمحيط"},
+ B5:{en:"Endpoint and device protection",ar:"حماية الأجهزة الطرفية"},
+ B6:{en:"Logging, monitoring and breach detection",ar:"السجلات والمراقبة واكتشاف الخروقات"},
+ B7:{en:"Incident response and breach notification",ar:"الاستجابة للحوادث والإبلاغ عن الخروقات"},
+ B8:{en:"Backup, recovery and resilience",ar:"النسخ الاحتياطي والاستعادة والمرونة"},
+ C1:{en:"Data residency, hosting and cloud transfers",ar:"موقع البيانات والاستضافة والنقل السحابي"},
+ C2:{en:"Video surveillance (CCTV) compliance",ar:"امتثال كاميرات المراقبة"},
+ C3:{en:"Vendor and processor risk management",ar:"إدارة مخاطر الموردين والمعالجين"},
+ C4:{en:"Risk assessments and security testing (DPIA, LIA, TIA, VA/PT)",ar:"تقييمات المخاطر واختبارات الأمن"},
+ C5:{en:"AI and analytics data governance",ar:"حوكمة بيانات الذكاء الاصطناعي والتحليلات"},
+ D1:{en:"Licensing and PDPC portal support",ar:"دعم الترخيص وبوابة المركز"},
+ D2:{en:"DPO-as-a-service, training and managed compliance",ar:"مسؤول حماية كخدمة والتدريب والامتثال المُدار"}
+};
+// Options matrix from the catalogue appendix: [enterprise, mid-market/SME, low-cost/open source]. † = Alphavito partner.
+const TOOLS = {
+ A1:["BigID, Varonis, Microsoft Purview","Netwrix, ManageEngine DataSecurity Plus","Microsoft Presidio"],
+ A2:["OneTrust, Securiti, TrustArc","Osano, DataGrail, ServiceNow privacy modules","PDPC templates plus SharePoint or a ticketing tool"],
+ A3:["OneTrust","Usercentrics (Cookiebot), Didomi, CookieYes","Klaro"],
+ A4:["OneTrust, Securiti modules","ServiceNow, Jira Service Management, Freshservice, Zoho Desk","Web form plus n8n or Power Automate plus a mailbox"],
+ A6:["OneTrust","Usercentrics (Cookiebot), Didomi, CookieYes","Klaro"],
+ B1:["Microsoft Entra ID, Okta, Ping Identity, CyberArk","Cisco Duo, FortiAuthenticator/FortiToken†, Delinea, BeyondTrust","Keycloak, privacyIDEA"],
+ B2:["Thales CipherTrust, Entrust nShield, Fortanix","BitLocker/FileVault, Sophos Central encryption†, Kaspersky†","VeraCrypt, LUKS, database TDE"],
+ B3:["Microsoft Purview DLP, Forcepoint, Proofpoint","FortiMail†, Sophos Email†, Mimecast, Trend Micro","Built-in DLP of the mail platform"],
+ B4:["Palo Alto Networks, Check Point, Fortinet†","Fortinet†, Sophos†, Cisco Meraki, WatchGuard","OPNsense, pfSense"],
+ B5:["CrowdStrike, Microsoft Defender, SentinelOne","Sophos†, Kaspersky†, ESET, Bitdefender, Trend Micro; Intune, ManageEngine","Built-in Microsoft Defender, Wazuh agents"],
+ B6:["Microsoft Sentinel, Splunk, Google Security Operations","FortiSIEM†, Elastic Security, Rapid7, ManageEngine Log360, Sophos MDR†","Wazuh, Graylog, Security Onion"],
+ B7:["Microsoft Sentinel, Splunk, Google Security Operations","FortiSIEM†, Elastic Security, Rapid7, ManageEngine Log360, Sophos MDR†","Wazuh, Graylog, Security Onion"],
+ B8:["Commvault, Rubrik, Cohesity, Dell PowerProtect†","Veeam†, Acronis†, Synology Active Backup†","Proxmox Backup Server, restic, Bacula"],
+ C1:["Egyptian data centres and telecom-operator clouds","On-premises servers (Dell†, HPE, Lenovo), Synology† or QNAP storage","Private cloud on Proxmox or OpenStack"],
+ C2:["Milestone XProtect, Genetec","Axis, Hanwha Vision, Bosch, Dahua†, Hikvision","Open-source VMS for small sites"],
+ C3:["OneTrust TPRM, SecurityScorecard, BitSight","UpGuard, Panorays","Questionnaire built on the PDPC checklist"],
+ C4:["Tenable, Qualys, Rapid7","Nessus Professional, Burp Suite Pro, Invicti","Greenbone/OpenVAS, OWASP ZAP"],
+ D2:["KnowBe4, Proofpoint","SoSafe, Hoxhunt, Sophos Phish Threat†","GoPhish plus in-house content"]
+};
+
+const T = {
+ en:{brand:"PDPL Readiness Check",lang:"العربية",h1:"How ready is your company for Egypt’s data protection law?",
+  lead:"Answer a short profile and checklist based on Law 151/2020, its Executive Regulations and the PDPC guidelines. You get a readiness score, the licences and DPO you need, and a prioritised action plan.",
+  s1:"Company profile",s2:"Assessment",s3:"Results and action plan",
+  company:"Company name",companyHint:"Optional. Stays in your browser and appears only on your report.",sector:"Sector",
+  records:"Personal data records held",recordsHint:"Customers, employees and others, counted per person. An estimate is fine.",
+  role:"Your role with personal data",roleBoth:"Controller and processor (most companies)",roleC:"Controller only",roleP:"Processor only (you process for clients)",
+  activities:"Which of these apply to you?",next1:"Start the assessment",back:"Back",next2:"See results",
+  yes:"Yes",partial:"Partly",no:"No",unsure:"Not sure",answered:(a,b)=>`${a} of ${b} answered`,
+  daysLeft:d=>`<b>${d}</b><span>days until the grace period ends on 1 November 2026</span>`,
+  ended:`<b>Grace period ended</b><span>Processing without a PDPC licence is now a violation</span>`,
+  bank:"Banks and other Central Bank–supervised institutions follow the Central Bank’s data rules instead of this law (Issuance Article 3). Money transfer and exchange companies are covered by the law.",
+  score:"Readiness score",bands:["Early stage","Partly ready","Nearly ready","Ready"],
+  feeK:"General licence fee (per year)",dpoK:"DPO category",licK:"Licences you need",deadK:"Compliance deadline",
+  free:"Free",egp:n=>`EGP ${n.toLocaleString("en-US")}`,half:"half rate: single role",
+  lic:{general:"General licence",transfer:"Cross-border transfer",cctv:"CCTV licence or permit",edm:"E-marketing (EDM)",sensitive:"covering sensitive data"},
+  bySection:"Score by area",plan:"Your action plan",planNone:"No gaps found in the areas you answered. Keep your evidence up to date and renew on time.",
+  pr:{3:"Critical",2:"High",1:"Medium"},when:{3:"Start now",2:"Within 30 days",1:"Within 90 days"},svc:"Service",ref:"Reference",
+  unanswered:n=>`${n} questions are unanswered and counted as gaps.`,
+  download:"Download report",dlNo:"Downloading isn’t available here.",dlFail:"The report wasn’t saved.",
+  ctaH:"Need help closing the gaps?",ctaP:"Alphavito can assess, implement and run your PDPL compliance programme.",
+  fine:"General guidance based on Law 151/2020, Ministerial Decree 816/2025 and PDPC guidelines (v1.1, January 2026); not legal advice. Your answers stay in this browser unless you choose to send them to Alphavito.",
+  reportTitle:"PDPL Readiness Report",generated:"Generated",
+  sectors:[["health","Healthcare"],["edu","Education"],["hr","HR, payroll and outsourcing"],["ecom","E-commerce and retail"],["fin","Finance (non-bank), insurance"],["re","Real estate"],["prof","Professional services"],["mfg","Manufacturing and logistics"],["tech","Technology and telecom"],["bank","Bank (Central Bank–supervised)"],["other","Other"]],
+  tierK:"Your package size",tiers:["Small (up to 100,000 records)","Medium (100,000 – 2 million records)","Large (above 2 million records)"],
+  pkgH:"Recommended service package",pkgRows:[["Privacy operations",["A1 light scan, A2 lightweight registers, A3, A4 (form plus mailbox), A5, A6","All A services, platform-based A2 and A4","All A services, integrated platform with APIs"]],["Security",["B1 (MFA), B2 (device and backup encryption), B4, B5, B8, B7 plan","All B services, managed B6","All B services, 24/7 B6 and B7 retainer"]],["Infrastructure",["C3 basic, C4 DPIA where needed","C1 audit, C2 if cameras, C3, C4 with external tests","All C services including C5"]],["Governance",["D1, shared DPO, e-learning","D1, outsourced or coached DPO, role training","D1, DPO support team, full managed compliance"]]],
+  stackK:"Suggested reference stack",stacks:{ms:["Microsoft-centric","Entra ID, Intune, Defender, Purview and Sentinel, plus a cookie tool and a request workflow. Plan the transfer licence, TIA and consent wording from day one."],local:["Local-first","On-premises or Egyptian hosting, one firewall and endpoint vendor, a SIEM (FortiSIEM, ManageEngine or Wazuh), local backup to Synology or Dell storage, registers on-premises. Avoids transfer licences."],ent:["Enterprise best-of-breed","OneTrust or Securiti, BigID or Varonis, CrowdStrike or SentinelOne, Splunk or Sentinel with 24/7 managed detection, Rubrik or Commvault, CyberArk."],sme:["SME budget","One firewall and endpoint vendor, the email platform’s built-in security, Wazuh, Veeam Community Edition or Synology Active Backup, CookieYes, a web form plus n8n for requests, PDPC templates for registers."]},
+  toolsK:"Tool options",partner:"† Alphavito partner. Confirm current features, Arabic support and local availability before buying.",
+  leadH:"Get your report reviewed by Alphavito",leadP:"Send your results to Alphavito and a consultant will contact you about closing the gaps.",
+  leadName:"Your name",leadEmail:"Work email",leadPhone:"Phone (optional)",
+  leadConsent:"I agree that Alphavito stores my contact details and these assessment results to contact me about PDPL services. I can ask for them to be deleted at any time by writing to Sales@alphavito.com.",
+  leadSend:"Send to Alphavito",leadSending:"Sending…",leadOk:"Thank you. Alphavito will contact you shortly.",leadErr:"Something went wrong. Please try again or email Sales@alphavito.com.",leadInvalid:"Enter your name and a valid email, and tick the consent box.",
+  tg:{sensitive:["Sensitive data","Health, biometric, financial, religious, political or security data"],children:["Children’s data","Data about anyone under 18"],cloud:["Cloud or systems outside Egypt","Email, CRM, backup or other SaaS hosted abroad"],mkt:["Marketing messages","Email, SMS, WhatsApp or calls promoting products"],cctv:["CCTV in public-facing areas","Cameras that can identify customers or visitors"],web:["Website or app","Collects personal data or uses cookies"],ai:["AI or analytics","Uses personal data for AI, models, scoring or analytics"]}},
+ ar:{brand:"فحص الجاهزية لقانون حماية البيانات",lang:"English",h1:"ما مدى جاهزية شركتك لقانون حماية البيانات الشخصية؟",
+  lead:"أجب عن ملف مختصر وقائمة تحقق مبنية على القانون 151 لسنة 2020 ولائحته التنفيذية وإرشادات المركز، لتحصل على درجة الجاهزية والتراخيص ومسؤول الحماية المطلوبين وخطة عمل حسب الأولوية.",
+  s1:"ملف الشركة",s2:"التقييم",s3:"النتائج وخطة العمل",
+  company:"اسم الشركة",companyHint:"اختياري. يبقى في متصفحك ويظهر في تقريرك فقط.",sector:"القطاع",
+  records:"عدد سجلات البيانات الشخصية",recordsHint:"العملاء والموظفون وغيرهم، محسوبين لكل شخص. يكفي التقدير.",
+  role:"دورك في التعامل مع البيانات",roleBoth:"متحكم ومعالج (أغلب الشركات)",roleC:"متحكم فقط",roleP:"معالج فقط (تعالج لصالح عملاء)",
+  activities:"أي مما يلي ينطبق عليك؟",next1:"ابدأ التقييم",back:"رجوع",next2:"عرض النتائج",
+  yes:"نعم",partial:"جزئيًا",no:"لا",unsure:"غير متأكد",answered:(a,b)=>`تمت الإجابة عن ${a} من ${b}`,
+  daysLeft:d=>`<b>${d}</b><span>يومًا حتى نهاية مهلة توفيق الأوضاع في 1 نوفمبر 2026</span>`,
+  ended:`<b>انتهت المهلة</b><span>المعالجة دون ترخيص من المركز أصبحت مخالفة</span>`,
+  bank:"تتبع البنوك والجهات الخاضعة لرقابة البنك المركزي قواعد البنك المركزي بدلًا من هذا القانون (المادة الثالثة من مواد الإصدار)، عدا شركات تحويل الأموال والصرافة فتخضع للقانون.",
+  score:"درجة الجاهزية",bands:["مرحلة مبكرة","جاهزية جزئية","قريب من الجاهزية","جاهز"],
+  feeK:"رسوم الترخيص العام (سنويًا)",dpoK:"فئة مسؤول الحماية",licK:"التراخيص المطلوبة",deadK:"موعد الامتثال",
+  free:"مجاني",egp:n=>`${n.toLocaleString("en-US")} جنيه`,half:"نصف الرسوم: دور واحد",
+  lic:{general:"الترخيص العام",transfer:"النقل عبر الحدود",cctv:"ترخيص أو تصريح الكاميرات",edm:"التسويق الإلكتروني",sensitive:"يشمل البيانات الحساسة"},
+  bySection:"الدرجة حسب المجال",plan:"خطة العمل",planNone:"لم تظهر فجوات في المجالات التي أجبت عنها. حافظ على تحديث الأدلة وجدد في الموعد.",
+  pr:{3:"حرجة",2:"عالية",1:"متوسطة"},when:{3:"ابدأ الآن",2:"خلال 30 يومًا",1:"خلال 90 يومًا"},svc:"الخدمة",ref:"المرجع",
+  unanswered:n=>`${n} سؤالًا بلا إجابة وتُحتسب فجوات.`,
+  download:"تنزيل التقرير",dlNo:"التنزيل غير متاح هنا.",dlFail:"لم يتم حفظ التقرير.",
+  ctaH:"تحتاج مساعدة لسد الفجوات؟",ctaP:"تستطيع ألفافيتو تقييم برنامج الامتثال وتنفيذه وتشغيله.",
+  fine:"إرشادات عامة مبنية على القانون 151/2020 والقرار الوزاري 816/2025 وإرشادات المركز (الإصدار 1.1، يناير 2026)، وليست استشارة قانونية. تبقى إجاباتك في هذا المتصفح ما لم تختر إرسالها إلى ألفافيتو.",
+  reportTitle:"تقرير الجاهزية لقانون حماية البيانات",generated:"تاريخ الإنشاء",
+  sectors:[["health","الرعاية الصحية"],["edu","التعليم"],["hr","الموارد البشرية والرواتب"],["ecom","التجارة الإلكترونية والتجزئة"],["fin","التمويل غير المصرفي والتأمين"],["re","العقارات"],["prof","الخدمات المهنية"],["mfg","الصناعة والخدمات اللوجستية"],["tech","التقنية والاتصالات"],["bank","بنك (خاضع للبنك المركزي)"],["other","أخرى"]],
+  tierK:"حجم الباقة",tiers:["صغيرة (حتى 100,000 سجل)","متوسطة (من 100,000 إلى 2 مليون سجل)","كبيرة (أكثر من 2 مليون سجل)"],
+  pkgH:"باقة الخدمات المقترحة",pkgRows:[["عمليات الخصوصية",["A1 فحص مبسط، A2 سجلات مبسطة، A3، A4 (نموذج وبريد)، A5، A6","كل خدمات A، مع A2 وA4 على منصة","كل خدمات A، منصة متكاملة مع واجهات برمجية"]],["الأمن",["B1 (التحقق متعدد العوامل)، B2 (تشفير الأجهزة والنسخ)، B4، B5، B8، خطة B7","كل خدمات B، مع B6 مُدار","كل خدمات B، مع B6 على مدار الساعة وعقد احتفاظ B7"]],["البنية التحتية",["C3 أساسي، C4 تقييم أثر عند الحاجة","تدقيق C1، وC2 عند وجود كاميرات، وC3، وC4 مع اختبارات خارجية","كل خدمات C بما فيها C5"]],["الحوكمة",["D1، مسؤول حماية مشترك، تعلم إلكتروني","D1، مسؤول حماية خارجي أو مدعوم، تدريب حسب الدور","D1، فريق دعم لمسؤول الحماية، امتثال مُدار بالكامل"]]],
+  stackK:"الحزمة التقنية المقترحة",stacks:{ms:["حزمة مايكروسوفت","Entra ID وIntune وDefender وPurview وSentinel، مع أداة للكوكيز وسير عمل للطلبات. خطط لترخيص النقل وتقييم الأثر وصيغة الموافقة من البداية."],local:["الاستضافة المحلية أولًا","استضافة داخلية أو في مصر، ومورد واحد لجدار الحماية والأجهزة، ونظام SIEM (FortiSIEM أو ManageEngine أو Wazuh)، ونسخ احتياطي محلي، وسجلات داخلية. تتجنب تراخيص النقل."],ent:["أفضل الحلول للمؤسسات","OneTrust أو Securiti، وBigID أو Varonis، وCrowdStrike أو SentinelOne، وSplunk أو Sentinel مع رصد مُدار على مدار الساعة، وRubrik أو Commvault، وCyberArk."],sme:["ميزانية الشركات الصغيرة","مورد واحد لجدار الحماية والأجهزة، وأمان منصة البريد المدمج، وWazuh، وVeeam Community أو Synology Active Backup، وCookieYes، ونموذج ويب مع n8n للطلبات، ونماذج المركز للسجلات."]},
+  toolsK:"خيارات الأدوات",partner:"† شريك لألفافيتو. تأكد من الخصائص الحالية والدعم العربي والتوفر المحلي قبل الشراء.",
+  leadH:"اطلب مراجعة تقريرك من ألفافيتو",leadP:"أرسل نتائجك إلى ألفافيتو وسيتواصل معك أحد المستشارين لسد الفجوات.",
+  leadName:"الاسم",leadEmail:"البريد الإلكتروني للعمل",leadPhone:"الهاتف (اختياري)",
+  leadConsent:"أوافق على أن تحتفظ ألفافيتو ببيانات التواصل الخاصة بي ونتائج هذا التقييم للتواصل معي بشأن خدمات حماية البيانات، ويمكنني طلب حذفها في أي وقت بمراسلة Sales@alphavito.com.",
+  leadSend:"أرسل إلى ألفافيتو",leadSending:"جارٍ الإرسال…",leadOk:"شكرًا لك. ستتواصل معك ألفافيتو قريبًا.",leadErr:"حدث خطأ. حاول مرة أخرى أو راسل Sales@alphavito.com.",leadInvalid:"أدخل اسمك وبريدًا صحيحًا، ووافق على الإقرار.",
+  tg:{sensitive:["بيانات حساسة","بيانات صحية أو حيوية أو مالية أو دينية أو سياسية أو أمنية"],children:["بيانات أطفال","بيانات أي شخص دون 18 عامًا"],cloud:["سحابة أو أنظمة خارج مصر","بريد أو نظام عملاء أو نسخ احتياطي مستضاف بالخارج"],mkt:["رسائل تسويقية","بريد أو رسائل نصية أو واتساب أو مكالمات للترويج"],cctv:["كاميرات في أماكن يرتادها الجمهور","كاميرات يمكنها التعرف على العملاء أو الزوار"],web:["موقع إلكتروني أو تطبيق","يجمع بيانات شخصية أو يستخدم الكوكيز"],ai:["ذكاء اصطناعي أو تحليلات","يستخدم بيانات شخصية للذكاء الاصطناعي أو النماذج أو التقييم أو التحليلات"]}}
+};
+const KEY="pdplgap:v1";
+let S={lang:"en",step:0,profile:{company:"",sector:"other",records:"",role:"both",sensitive:false,children:false,cloud:false,mkt:false,cctv:false,web:true,ai:false},answers:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&s.profile) S=Object.assign(S,s,{profile:Object.assign(S.profile,s.profile)});}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const L=()=>T[S.lang];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function fee(n){ n=Math.max(0,Math.floor(+n||0)); if(n<=100000) return 0;
+  if(n<=1000000) return Math.ceil(n/100000)*100;
+  if(n<=2000000) return Math.ceil((n-1000000)/100000)*5000;
+  if(n<=3000000) return 50000+Math.ceil((n-2000000)/100000)*10000;
+  if(n<=4000000) return 150000+Math.ceil((n-3000000)/100000)*15000;
+  if(n<=5000000) return 300000+Math.ceil((n-4000000)/100000)*20000;
+  return 666666; }
+const dpoCat=n=>{n=+n||0; return n<=100000?"C":n<=2000000?"B":"A";};
+const applicable=()=>QUESTIONS.filter(q=>!q.when||q.when(S.profile));
+const VAL={yes:1,partial:.5,no:0,unsure:0};
+
+function renderStatic(){
+  const t=L(); document.documentElement.lang=S.lang; document.documentElement.dir=S.lang==="ar"?"rtl":"ltr";
+  document.title=t.brand+" — Alphavito";
+  document.querySelectorAll("[data-t]").forEach(el=>{const v=t[el.dataset.t]; if(typeof v==="string") el.textContent=v;});
+  $("lang").textContent=t.lang;
+  const end=new Date("2026-11-01T00:00:00+02:00"), d=Math.ceil((end-new Date())/86400000);
+  $("clock").innerHTML=d>0?t.daysLeft(d):t.ended;
+  $("sector").innerHTML=t.sectors.map(([v,l])=>`<option value="${v}">${esc(l)}</option>`).join("");
+  $("sector").value=S.profile.sector;
+  $("role").innerHTML=[["both",t.roleBoth],["controller",t.roleC],["processor",t.roleP]].map(([v,l])=>`<label><input type="radio" name="role" value="${v}" ${S.profile.role===v?"checked":""}> ${esc(l)}</label>`).join("");
+  $("toggles").innerHTML=Object.entries(t.tg).map(([k,[b,s]])=>`<label class="tg"><input type="checkbox" data-k="${k}" ${S.profile[k]?"checked":""}><span><b>${esc(b)}</b><span>${esc(s)}</span></span></label>`).join("");
+  $("company").value=S.profile.company; $("records").value=S.profile.records;
+  bankNote(); renderQs(); go(S.step,true);
+}
+function bankNote(){ $("bankNote").innerHTML=S.profile.sector==="bank"?`<div class="notice">${esc(L().bank)}</div>`:""; }
+function renderQs(){
+  const t=L(), qs=applicable(); let html="";
+  SECTIONS.forEach(sec=>{ const items=qs.filter(q=>q.s===sec.id); if(!items.length) return;
+    html+=`<div class="sec"><h2>${esc(sec[S.lang])}</h2>`+items.map(q=>{ const a=S.answers[q.id];
+      return `<div class="q"><p>${esc(q[S.lang])}</p><div class="ans" role="group">`+["yes","partial","no","unsure"].map(v=>`<button type="button" data-q="${q.id}" data-v="${v}" aria-pressed="${a===v}">${t[v]}</button>`).join("")+`</div><div class="ref" dir="ltr">${esc(q.ref)}</div></div>`;}).join("")+`</div>`; });
+  $("qs").innerHTML=html; progress();
+}
+function progress(){ const qs=applicable(), n=qs.filter(q=>S.answers[q.id]).length;
+  $("pbar").style.width=(qs.length?n/qs.length*100:0)+"%"; $("ptext").textContent=L().answered(n,qs.length); }
+function compute(){
+  const qs=applicable(); let W=0,G=0; const bySec={};
+  qs.forEach(q=>{ const v=VAL[S.answers[q.id]]??0; W+=q.w; G+=q.w*v; const b=bySec[q.s]||(bySec[q.s]={w:0,g:0}); b.w+=q.w; b.g+=q.w*v; });
+  const gaps=qs.filter(q=>(VAL[S.answers[q.id]]??0)<1).sort((a,b)=>b.w-a.w||(VAL[S.answers[a.id]]??0)-(VAL[S.answers[b.id]]??0));
+  const n=+S.profile.records||0, single=S.profile.role!=="both", f0=fee(n), f=single?Math.round(f0/2):f0;
+  const lic=[L().lic.general+(S.profile.sensitive?" ("+L().lic.sensitive+")":"")];
+  if(S.profile.cloud) lic.push(L().lic.transfer); if(S.profile.cctv) lic.push(L().lic.cctv); if(S.profile.mkt) lic.push(L().lic.edm);
+  return {score:W?Math.round(G/W*100):0,bySec,gaps,fee:f,single,dpo:dpoCat(n),lic,unanswered:qs.filter(q=>!S.answers[q.id]).length};
+}
+function bandOf(s){ return s>=85?3:s>=60?2:s>=35?1:0; }
+const tierOf=n=>{n=+n||0; return n<=100000?0:n<=2000000?1:2;};
+function stackOf(p){ const n=+p.records||0; if(n>2000000) return "ent"; if(p.sensitive||p.children) return "local"; if(n<=100000) return "sme"; return p.cloud?"ms":"local"; }
+// Tool column follows client size: large -> enterprise, medium -> mid-market, small -> low-cost.
+const toolsFor=(svc,tier)=>TOOLS[svc]?TOOLS[svc][[2,1,0][tier]]:"";
+function renderResults(){
+  const t=L(), r=compute(), tier=tierOf(S.profile.records), b=bandOf(r.score), bc=["var(--no)","var(--partial)","var(--blue)","var(--blue)"][b];
+  let h=`<div class="card"><div class="score"><div><div class="big" style="color:${bc}">${r.score}%</div><span class="band" style="background:var(--surface2);color:${bc}">${t.bands[b]}</span></div>
+  <div><b>${esc(t.score)}${S.profile.company?" — "+esc(S.profile.company):""}</b>${r.unanswered?`<p class="empty" style="margin:6px 0 0">${esc(t.unanswered(r.unanswered))}</p>`:""}</div></div>
+  <div class="facts">
+   <div class="fact"><div class="k">${t.feeK}</div><div class="v">${r.fee?t.egp(r.fee):t.free}</div>${r.single&&r.fee?`<div class="k">${t.half}</div>`:""}</div>
+   <div class="fact"><div class="k">${t.dpoK}</div><div class="v">${r.dpo}</div></div>
+   <div class="fact"><div class="k">${t.licK}</div><div class="v" style="font-size:15px">${r.lic.map(esc).join("<br>")}</div></div>
+   <div class="fact"><div class="k">${t.deadK}</div><div class="v">1 Nov 2026</div></div>
+  </div></div>`;
+  h+=`<h2 class="h">${t.bySection}</h2><div class="card"><div class="rows">`+SECTIONS.filter(s=>r.bySec[s.id]).map(s=>{const v=Math.round(r.bySec[s.id].g/r.bySec[s.id].w*100);
+   return `<div class="row"><span>${esc(s[S.lang])}</span><div class="bar"><i style="width:${v}%;background:${v>=85?"var(--blue)":v>=50?"var(--partial)":"var(--no)"}"></i></div><b>${v}%</b></div>`;}).join("")+`</div></div>`;
+  h+=`<h2 class="h">${t.plan}</h2>`;
+  h+= r.gaps.length? r.gaps.map(q=>`<div class="act p${q.w}"><div class="meta"><span class="tag">${t.pr[q.w]}</span><span class="tag">${t.when[q.w]}</span><span class="tag">${esc(SECTIONS.find(s=>s.id===q.s)[S.lang])}</span></div>
+   <p><b>${esc(S.lang==="ar"?q.aar:q.aen)}</b></p><p class="ref">${t.svc}: ${q.svc} ${esc(SERVICES[q.svc][S.lang])} · <span dir="ltr">${esc(q.ref)}</span></p>${toolsFor(q.svc,tier)?`<p class="ref">${t.toolsK}: <span dir="ltr">${esc(toolsFor(q.svc,tier))}</span></p>`:""}</div>`).join("") : `<p class="empty">${t.planNone}</p>`;
+  if(r.gaps.length) h+=`<p class="fine" style="margin:8px 0 0">${esc(t.partner)}</p>`;
+  const st=t.stacks[stackOf(S.profile)];
+  h+=`<h2 class="h">${t.pkgH}</h2><div class="card"><p style="margin:0 0 12px"><b>${t.tierK}:</b> ${esc(t.tiers[tier])}</p><div class="rows">`+t.pkgRows.map(([k,v])=>`<div class="pkg"><b>${esc(k)}</b><span>${esc(v[tier])}</span></div>`).join("")+`</div>
+   <p style="margin:16px 0 0"><b>${t.stackK}: ${esc(st[0])}</b></p><p class="empty" style="margin:4px 0 0">${esc(st[1])}</p></div>`;
+  h+=`<h2 class="h">${t.leadH}</h2><form class="card" id="lead" novalidate><p style="margin:0 0 14px">${esc(t.leadP)}</p><div class="grid2">
+   <label class="f"><span>${t.leadName}</span><input type="text" name="name" autocomplete="name" maxlength="120" required></label>
+   <label class="f"><span>${t.leadEmail}</span><input type="email" name="email" autocomplete="email" maxlength="200" required dir="ltr"></label>
+   <label class="f"><span>${t.leadPhone}</span><input type="tel" name="phone" autocomplete="tel" maxlength="40" dir="ltr"></label></div>
+   <label class="tg" style="margin-top:14px"><input type="checkbox" name="consent" required><span>${esc(t.leadConsent)}</span></label>
+   <div class="actions"><span id="leadmsg" class="empty" role="status"></span><button class="btn primary" type="submit">${t.leadSend}</button></div></form>`;
+  h+=`<div class="actions"><span id="dlmsg" class="empty"></span><button class="btn primary" id="dl" type="button" hidden>${t.download}</button></div>`;
+  $("results").innerHTML=h; setupDownload(r); setupLead(r);
+}
+function setupLead(r){ const f=$("lead"); if(!f) return; const msg=$("leadmsg");
+  f.onsubmit=async e=>{ e.preventDefault(); const t=L(), d=Object.fromEntries(new FormData(f));
+    if(!d.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())||!d.consent){ msg.textContent=t.leadInvalid; return; }
+    const btn=f.querySelector("button"); btn.disabled=true; msg.textContent=t.leadSending;
+    try{ const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({name:d.name.trim(),email:d.email.trim(),phone:(d.phone||"").trim(),consent:true,lang:S.lang,profile:S.profile,answers:S.answers,score:r.score,gaps:r.gaps.map(q=>q.id)})});
+      if(!res.ok) throw new Error(res.status); msg.textContent=t.leadOk; f.querySelectorAll("input").forEach(i=>i.disabled=true); }
+    catch(err){ msg.textContent=t.leadErr; btn.disabled=false; } };
+}
+let DL=null;
+async function setupDownload(r){ const btn=$("dl"); if(!btn) return;
+  if(DL===null&&window.claude&&window.claude.use){ try{ DL=await window.claude.use("downloads"); }catch(e){ DL=false; } }
+  if(!DL){ btn.hidden=false; btn.onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([reportHTML(compute())],{type:"text/html"}));
+    a.download="PDPL-readiness-report.html"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }; return; }
+  btn.hidden=false;
+  btn.onclick=async()=>{ try{ await DL.save({filename:"PDPL-readiness-report.html",data:new Blob([reportHTML(compute())],{type:"text/html"})}); }
+   catch(e){ $("dlmsg").textContent = (e&&(e.code==="declined"))?"":(e&&(e.code==="unavailable"||e.code==="not_granted"))?L().dlNo:L().dlFail; } };
+}
+function reportHTML(r){ const t=L(), ar=S.lang==="ar", d=new Date().toISOString().slice(0,10);
+  const rows=SECTIONS.filter(s=>r.bySec[s.id]).map(s=>`<tr><td>${esc(s[S.lang])}</td><td>${Math.round(r.bySec[s.id].g/r.bySec[s.id].w*100)}%</td></tr>`).join("");
+  const acts=r.gaps.map(q=>`<tr><td>${t.pr[q.w]}</td><td>${t.when[q.w]}</td><td>${esc(ar?q.aar:q.aen)}</td><td dir="ltr">${q.svc} · ${esc(q.ref)}</td></tr>`).join("");
+  return `<!doctype html><html lang="${S.lang}" dir="${ar?"rtl":"ltr"}"><head><meta charset="utf-8"><title>${t.reportTitle}</title><style>body{font-family:Arial,Tahoma,sans-serif;color:#14202C;max-width:900px;margin:30px auto;padding:0 20px;line-height:1.5}h1{color:#0B1F3A;border-bottom:3px solid #E03D00;padding-bottom:8px}table{border-collapse:collapse;width:100%;margin:10px 0 24px}th,td{border:1px solid #D7DFE8;padding:8px;text-align:start;vertical-align:top}th{background:#0B1F3A;color:#fff}.k{color:#56626E}</style></head><body>
+  <h1>${t.reportTitle}</h1><p class="k">${esc(S.profile.company||"")} · ${t.generated}: ${d}</p>
+  <h2>${t.score}: ${r.score}% — ${t.bands[bandOf(r.score)]}</h2>
+  <table><tr><th>${t.feeK}</th><th>${t.dpoK}</th><th>${t.licK}</th><th>${t.deadK}</th></tr><tr><td>${r.fee?t.egp(r.fee):t.free}</td><td>${r.dpo}</td><td>${r.lic.map(esc).join("<br>")}</td><td>1 Nov 2026</td></tr></table>
+  <h2>${t.bySection}</h2><table>${rows}</table>
+  <h2>${t.plan}</h2>${r.gaps.length?`<table><tr><th>${t.pr[3].replace(/.*/,ar?"الأولوية":"Priority")}</th><th>${ar?"التوقيت":"Timing"}</th><th>${ar?"الإجراء":"Action"}</th><th>${t.ref}</th></tr>${acts}</table>`:`<p>${t.planNone}</p>`}
+  <h2>${t.pkgH} — ${esc(t.tiers[tierOf(S.profile.records)])}</h2><table>${t.pkgRows.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v[tierOf(S.profile.records)])}</td></tr>`).join("")}</table>
+  <p><b>${t.stackK}: ${esc(t.stacks[stackOf(S.profile)][0])}</b> — ${esc(t.stacks[stackOf(S.profile)][1])}</p>
+  <p class="k">${t.fine}</p><p>Alphavito Technology Solutions · www.alphavito.com · Sales@alphavito.com · 01006527795</p></body></html>`; }
+function go(i,quiet){ S.step=i; save(); document.querySelectorAll(".panel").forEach((p,k)=>p.classList.toggle("on",k===i));
+  document.querySelectorAll(".step").forEach((b,k)=>b.setAttribute("aria-current",k===i?"step":"false"));
+  if(i===1) renderQs(); if(i===2) renderResults(); if(!quiet) window.scrollTo({top:document.querySelector(".steps").offsetTop-10,behavior:"smooth"}); }
+document.addEventListener("click",e=>{ const g=e.target.closest("[data-go]"); if(g){ go(+g.dataset.go); return; }
+  const a=e.target.closest(".ans button"); if(a){ S.answers[a.dataset.q]=a.dataset.v; save();
+    a.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b===a)); progress(); } });
+document.addEventListener("change",e=>{ const el=e.target;
+  if(el.id==="sector"){S.profile.sector=el.value; bankNote();}
+  else if(el.name==="role"){S.profile.role=el.value;}
+  else if(el.dataset&&el.dataset.k){S.profile[el.dataset.k]=el.checked;}
+  save(); });
+document.addEventListener("input",e=>{ if(e.target.id==="company"){S.profile.company=e.target.value;save();} if(e.target.id==="records"){S.profile.records=e.target.value;save();} });
+$("lang").onclick=()=>{ S.lang=S.lang==="en"?"ar":"en"; save(); renderStatic(); };
+$("logo").src="data:image/png;base64,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";
+renderStatic();
+
+</script>
+</body>
+</html>
