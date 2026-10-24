@@ -31,7 +31,7 @@ button,input,select{font:inherit;color:inherit}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 header.top{background:var(--navy);color:#F3F6FA}
 header.top .wrap{display:flex;align-items:center;gap:16px;padding-top:14px;padding-bottom:14px}
-.logo{height:38px;width:auto;background:#FFFFFF;border-radius:8px;padding:5px 8px}
+.logo{height:38px;width:auto;display:block}
 .top .name{font-weight:600;font-size:15px;opacity:.9}
 .spacer{flex:1}
 .lang{background:transparent;border:1px solid rgba(255,255,255,.35);color:#F3F6FA;border-radius:8px;padding:6px 12px;cursor:pointer}
@@ -108,6 +108,11 @@ h2.h{font-size:22px;margin:26px 0 10px}
 .cta a{color:#FFB38F}
 .fine{color:var(--muted);font-size:13px;margin:22px 0 30px}
 .empty{color:var(--muted)}
+.tip{display:inline-grid;place-items:center;width:20px;height:20px;margin-inline-start:6px;border-radius:50%;border:1px solid var(--line);background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;line-height:1;font-style:normal;cursor:help;vertical-align:middle;padding:0}
+.tip:hover,.tip:focus-visible{color:#fff;background:var(--blue);border-color:var(--blue)}
+.tip::after{content:attr(data-tip);position:absolute;inset-inline:10px;top:calc(100% - 6px);z-index:20;background:var(--navy);color:#F3F6FA;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:400;line-height:1.5;text-align:start;white-space:pre-line;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+.tip:hover::after,.tip:focus::after{opacity:1;visibility:visible}
+.q,.fact,.act{position:relative}
 .pkg{display:grid;grid-template-columns:minmax(140px,200px) 1fr;gap:12px;font-size:15px;padding:8px 0;border-top:1px solid var(--line)}
 .pkg:first-child{border-top:0}
 input[type=email],input[type=tel]{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
@@ -509,6 +514,32 @@ const SERVICES = {
  D1:{en:"Licensing and PDPC portal support",ar:"دعم الترخيص وبوابة المركز"},
  D2:{en:"DPO-as-a-service, training and managed compliance",ar:"مسؤول حماية كخدمة والتدريب والامتثال المُدار"}
 };
+// "Client outcome" of each service in the catalogue, shown as the service tooltip.
+const OUTCOMES = {
+ A1:{en:"A complete, current map of what personal data exists, where, and whether it is sensitive or children’s data, plus a record count per category.",ar:"خريطة كاملة ومحدثة للبيانات الشخصية الموجودة وأماكنها وهل هي حساسة أو بيانات أطفال، مع عدد السجلات لكل فئة."},
+ A2:{en:"One tamper-evident system of record (RoPA, consents, requests, breaches, deletions) that the DPO maintains and PDPC inspectors can review.",ar:"نظام سجلات واحد مقاوم للتلاعب (المعالجة، الموافقات، الطلبات، الخروقات، المحو) يديره مسؤول الحماية ويمكن لمفتشي المركز مراجعته."},
+ A3:{en:"Every consent is captured correctly, provable and withdrawable on every channel, with withdrawal pushed to all systems.",ar:"كل موافقة تُسجل بشكل صحيح ويمكن إثباتها وسحبها من أي قناة، مع تطبيق السحب في كل الأنظمة."},
+ A4:{en:"Anyone can submit a request easily; you verify identity, meet the 6-working-day deadline and keep a full log.",ar:"يستطيع أي شخص تقديم طلب بسهولة، وتتحقق من هويته، وتلتزم بمهلة 6 أيام عمل، وتحتفظ بسجل كامل."},
+ A5:{en:"A retention schedule that is actually enforced, with proof of every deletion.",ar:"جدول احتفاظ يُطبق فعليًا، مع إثبات لكل عملية محو."},
+ A6:{en:"Every website and app shows compliant notices and fires non-essential tracking only after consent.",ar:"كل موقع وتطبيق يعرض إشعارات متوافقة ولا يشغّل التتبع غير الضروري إلا بعد الموافقة."},
+ A7:{en:"Every campaign on email, SMS, WhatsApp, calls or targeted ads is lawful and provable.",ar:"كل حملة عبر البريد أو الرسائل أو واتساب أو المكالمات أو الإعلانات الموجهة قانونية ويمكن إثباتها."},
+ B1:{en:"Only the right people reach personal data, with proof of who accessed what.",ar:"لا يصل إلى البيانات الشخصية إلا المخولون، مع إثبات من وصل إلى ماذا."},
+ B2:{en:"A stolen disk, backup or database extract reveals nothing usable.",ar:"القرص أو النسخة الاحتياطية أو مستخرج قاعدة البيانات المسروق لا يكشف شيئًا قابلًا للاستخدام."},
+ B3:{en:"Personal data cannot leave by email, web upload, USB or messaging without control.",ar:"لا تخرج البيانات الشخصية عبر البريد أو الرفع على الويب أو USB أو المراسلة دون رقابة."},
+ B4:{en:"Systems holding personal data are segmented and protected from external attack.",ar:"الأنظمة التي تحتوي على بيانات شخصية مقسمة ومحمية من الهجمات الخارجية."},
+ B5:{en:"Every laptop, server and phone that touches personal data is protected, patched and recoverable.",ar:"كل حاسوب وخادم وهاتف يتعامل مع البيانات الشخصية محمي ومحدث وقابل للاستعادة."},
+ B6:{en:"Breaches are detected quickly and the facts the PDPC needs are already logged.",ar:"تُكتشف الخروقات بسرعة، والمعلومات التي يحتاجها المركز مسجلة مسبقًا."},
+ B7:{en:"A rehearsed process that meets the 72-hour and 3-working-day deadlines with complete, accurate notices.",ar:"إجراء مُجرَّب يلتزم بمهلتي 72 ساعة و3 أيام عمل بإخطارات كاملة ودقيقة."},
+ B8:{en:"Ransomware or hardware loss does not cause permanent loss of personal data.",ar:"برمجيات الفدية أو تعطل الأجهزة لا تسبب فقدانًا دائمًا للبيانات الشخصية."},
+ C1:{en:"You know every country your data reaches through SaaS, cloud, support access or group systems, and each flow is localised or licensed.",ar:"تعرف كل دولة تصل إليها بياناتك عبر الخدمات السحابية أو الدعم الفني أو أنظمة المجموعة، وكل مسار إما محلي أو مرخص."},
+ C2:{en:"Surveillance meets security needs without unlawful identification or exposure of footage.",ar:"المراقبة تلبي احتياجات الأمن دون تعرّف غير قانوني على الأشخاص أو كشف للتسجيلات."},
+ C3:{en:"Every vendor that touches personal data is assessed, contracted and monitored.",ar:"كل مورد يتعامل مع البيانات الشخصية يتم تقييمه والتعاقد معه ومتابعته."},
+ C4:{en:"Risks are identified and treated before regulators or attackers find them, with documentation the PDPC can review.",ar:"تُكتشف المخاطر وتُعالج قبل أن يجدها المنظم أو المهاجمون، مع توثيق يمكن للمركز مراجعته."},
+ C5:{en:"Analytics and AI projects use personal data lawfully and safely.",ar:"مشروعات التحليلات والذكاء الاصطناعي تستخدم البيانات الشخصية بشكل قانوني وآمن."},
+ D1:{en:"The right licences are applied for early, with a complete file, and never lapse.",ar:"يُتقدم للتراخيص الصحيحة مبكرًا بملف كامل، ولا تنتهي صلاحيتها أبدًا."},
+ D2:{en:"A qualified, independent DPO function and a trained workforce, with compliance that stays current.",ar:"وظيفة مسؤول حماية مؤهلة ومستقلة وموظفون مدربون، مع امتثال يبقى محدثًا."}
+};
+const tip=text=>`<button type="button" class="tip" aria-label="${esc(L().tipMore+": "+text)}" data-tip="${esc(text)}">i</button>`;
 // Options matrix from the catalogue appendix: [enterprise, mid-market/SME, low-cost/open source]. † = Alphavito partner.
 const TOOLS = {
  A1:["BigID, Varonis, Microsoft Purview","Netwrix, ManageEngine DataSecurity Plus","Microsoft Presidio"],
@@ -560,6 +591,11 @@ const T = {
   stackK:"Suggested reference stack",stacks:{ms:["Microsoft-centric","Entra ID, Intune, Defender, Purview and Sentinel, plus a cookie tool and a request workflow. Plan the transfer licence, TIA and consent wording from day one."],local:["Local-first","On-premises or Egyptian hosting, one firewall and endpoint vendor, a SIEM (FortiSIEM, ManageEngine or Wazuh), local backup to Synology or Dell storage, registers on-premises. Avoids transfer licences."],ent:["Enterprise best-of-breed","OneTrust or Securiti, BigID or Varonis, CrowdStrike or SentinelOne, Splunk or Sentinel with 24/7 managed detection, Rubrik or Commvault, CyberArk."],sme:["SME budget","One firewall and endpoint vendor, the email platform’s built-in security, Wazuh, Veeam Community Edition or Synology Active Backup, CookieYes, a web form plus n8n for requests, PDPC templates for registers."]},
   toolsK:"Tool options",partner:"† Alphavito partner. Confirm current features, Arabic support and local availability before buying.",
   leadH:"Get your report reviewed by Alphavito",leadP:"Send your results to Alphavito and a consultant will contact you about closing the gaps.",
+  tipMore:"More information",tipDo:"What’s expected",tipLaw:"Legal basis",
+  tipFee:"Yearly fee for the general licence, set by how many personal data records you hold (ER Art. 19). Free up to 100,000 records; half the fee if you act only as a controller or only as a processor.",
+  tipDpo:"The PDPC registers DPOs in three categories by record count: C up to 100,000 records, B up to 2 million, A above 2 million (DPO Categories Guidelines).",
+  tipLic:"The general licence comes first. Supplementary licences for cross-border transfer, CCTV and e-marketing are not valid without it (ER Arts. 16, 27, 29, 31).",
+  tipDead:"End of the grace period. After this date, processing personal data without a PDPC licence is a violation.",
   gateH:"Get your report",gateP:"Enter your name and mobile number to download the report.",gateMobile:"Mobile number",
   gateConsent:"I agree that Alphavito stores my name, mobile number and these assessment results to contact me about PDPL services. I can ask for them to be deleted at any time by writing to pdpl@alphavito.com.",
   gateInvalid:"Enter your name and a valid Egyptian mobile number (11 digits starting with 01), and tick the consent box.",
@@ -596,6 +632,11 @@ const T = {
   stackK:"الحزمة التقنية المقترحة",stacks:{ms:["حزمة مايكروسوفت","Entra ID وIntune وDefender وPurview وSentinel، مع أداة للكوكيز وسير عمل للطلبات. خطط لترخيص النقل وتقييم الأثر وصيغة الموافقة من البداية."],local:["الاستضافة المحلية أولًا","استضافة داخلية أو في مصر، ومورد واحد لجدار الحماية والأجهزة، ونظام SIEM (FortiSIEM أو ManageEngine أو Wazuh)، ونسخ احتياطي محلي، وسجلات داخلية. تتجنب تراخيص النقل."],ent:["أفضل الحلول للمؤسسات","OneTrust أو Securiti، وBigID أو Varonis، وCrowdStrike أو SentinelOne، وSplunk أو Sentinel مع رصد مُدار على مدار الساعة، وRubrik أو Commvault، وCyberArk."],sme:["ميزانية الشركات الصغيرة","مورد واحد لجدار الحماية والأجهزة، وأمان منصة البريد المدمج، وWazuh، وVeeam Community أو Synology Active Backup، وCookieYes، ونموذج ويب مع n8n للطلبات، ونماذج المركز للسجلات."]},
   toolsK:"خيارات الأدوات",partner:"† شريك لألفافيتو. تأكد من الخصائص الحالية والدعم العربي والتوفر المحلي قبل الشراء.",
   leadH:"اطلب مراجعة تقريرك من ألفافيتو",leadP:"أرسل نتائجك إلى ألفافيتو وسيتواصل معك أحد المستشارين لسد الفجوات.",
+  tipMore:"مزيد من المعلومات",tipDo:"المطلوب",tipLaw:"السند القانوني",
+  tipFee:"الرسوم السنوية للترخيص العام، وتحدد حسب عدد سجلات البيانات الشخصية لديك (المادة 19 من اللائحة). مجاني حتى 100,000 سجل، ونصف الرسوم إذا كنت متحكمًا فقط أو معالجًا فقط.",
+  tipDpo:"يقيد المركز مسؤولي حماية البيانات في ثلاث فئات حسب عدد السجلات: C حتى 100,000 سجل، وB حتى 2 مليون، وA لأكثر من 2 مليون (إرشادات فئات مسؤول الحماية).",
+  tipLic:"الترخيص العام أولًا. التراخيص التكميلية للنقل عبر الحدود وكاميرات المراقبة والتسويق الإلكتروني غير سارية بدونه (المواد 16 و27 و29 و31 من اللائحة).",
+  tipDead:"نهاية مهلة توفيق الأوضاع. بعد هذا التاريخ تصبح معالجة البيانات الشخصية دون ترخيص من المركز مخالفة.",
   gateH:"احصل على تقريرك",gateP:"أدخل اسمك ورقم هاتفك المحمول لتنزيل التقرير.",gateMobile:"رقم الهاتف المحمول",
   gateConsent:"أوافق على أن تحتفظ ألفافيتو باسمي ورقم هاتفي ونتائج هذا التقييم للتواصل معي بشأن خدمات حماية البيانات، ويمكنني طلب حذفها في أي وقت بمراسلة pdpl@alphavito.com.",
   gateInvalid:"أدخل اسمك ورقم هاتف محمول مصري صحيح (11 رقمًا يبدأ بـ 01)، ووافق على الإقرار.",
@@ -643,7 +684,8 @@ function renderQs(){
   const t=L(), qs=applicable(); let html="";
   SECTIONS.forEach(sec=>{ const items=qs.filter(q=>q.s===sec.id); if(!items.length) return;
     html+=`<div class="sec"><h2>${esc(sec[S.lang])}</h2>`+items.map(q=>{ const a=S.answers[q.id];
-      return `<div class="q"><p>${esc(q[S.lang])}</p><div class="ans" role="group">`+["yes","partial","no","unsure"].map(v=>`<button type="button" data-q="${q.id}" data-v="${v}" aria-pressed="${a===v}">${t[v]}</button>`).join("")+`</div><div class="ref" dir="ltr">${esc(q.ref)}</div></div>`;}).join("")+`</div>`; });
+      const qt=`${t.tipDo}: ${S.lang==="ar"?q.aar:q.aen}\n${t.tipLaw}: ${q.ref}\n${t.svc}: ${q.svc} ${SERVICES[q.svc][S.lang]}`;
+      return `<div class="q"><p>${esc(q[S.lang])}${tip(qt)}</p><div class="ans" role="group">`+["yes","partial","no","unsure"].map(v=>`<button type="button" data-q="${q.id}" data-v="${v}" aria-pressed="${a===v}">${t[v]}</button>`).join("")+`</div><div class="ref" dir="ltr">${esc(q.ref)}</div></div>`;}).join("")+`</div>`; });
   $("qs").innerHTML=html; progress();
 }
 function progress(){ const qs=applicable(), n=qs.filter(q=>S.answers[q.id]).length;
@@ -667,16 +709,16 @@ function renderResults(){
   let h=`<div class="card"><div class="score"><div><div class="big" style="color:${bc}">${r.score}%</div><span class="band" style="background:var(--surface2);color:${bc}">${t.bands[b]}</span></div>
   <div><b>${esc(t.score)}${S.profile.company?" — "+esc(S.profile.company):""}</b>${r.unanswered?`<p class="empty" style="margin:6px 0 0">${esc(t.unanswered(r.unanswered))}</p>`:""}</div></div>
   <div class="facts">
-   <div class="fact"><div class="k">${t.feeK}</div><div class="v">${r.fee?t.egp(r.fee):t.free}</div>${r.single&&r.fee?`<div class="k">${t.half}</div>`:""}</div>
-   <div class="fact"><div class="k">${t.dpoK}</div><div class="v">${r.dpo}</div></div>
-   <div class="fact"><div class="k">${t.licK}</div><div class="v" style="font-size:15px">${r.lic.map(esc).join("<br>")}</div></div>
-   <div class="fact"><div class="k">${t.deadK}</div><div class="v">1 Nov 2026</div></div>
+   <div class="fact"><div class="k">${t.feeK}${tip(t.tipFee)}</div><div class="v">${r.fee?t.egp(r.fee):t.free}</div>${r.single&&r.fee?`<div class="k">${t.half}</div>`:""}</div>
+   <div class="fact"><div class="k">${t.dpoK}${tip(t.tipDpo)}</div><div class="v">${r.dpo}</div></div>
+   <div class="fact"><div class="k">${t.licK}${tip(t.tipLic)}</div><div class="v" style="font-size:15px">${r.lic.map(esc).join("<br>")}</div></div>
+   <div class="fact"><div class="k">${t.deadK}${tip(t.tipDead)}</div><div class="v">1 Nov 2026</div></div>
   </div></div>`;
   h+=`<h2 class="h">${t.bySection}</h2><div class="card"><div class="rows">`+SECTIONS.filter(s=>r.bySec[s.id]).map(s=>{const v=Math.round(r.bySec[s.id].g/r.bySec[s.id].w*100);
    return `<div class="row"><span>${esc(s[S.lang])}</span><div class="bar"><i style="width:${v}%;background:${v>=85?"var(--blue)":v>=50?"var(--partial)":"var(--no)"}"></i></div><b>${v}%</b></div>`;}).join("")+`</div></div>`;
   h+=`<h2 class="h">${t.plan}</h2>`;
   h+= r.gaps.length? r.gaps.map(q=>`<div class="act p${q.w}"><div class="meta"><span class="tag">${t.pr[q.w]}</span><span class="tag">${t.when[q.w]}</span><span class="tag">${esc(SECTIONS.find(s=>s.id===q.s)[S.lang])}</span></div>
-   <p><b>${esc(S.lang==="ar"?q.aar:q.aen)}</b></p><p class="ref">${t.svc}: ${q.svc} ${esc(SERVICES[q.svc][S.lang])} · <span dir="ltr">${esc(q.ref)}</span></p>${toolsFor(q.svc,tier)?`<p class="ref">${t.toolsK}: <span dir="ltr">${esc(toolsFor(q.svc,tier))}</span></p>`:""}</div>`).join("") : `<p class="empty">${t.planNone}</p>`;
+   <p><b>${esc(S.lang==="ar"?q.aar:q.aen)}</b></p><p class="ref">${t.svc}: ${q.svc} ${esc(SERVICES[q.svc][S.lang])}${tip(OUTCOMES[q.svc][S.lang])} · <span dir="ltr">${esc(q.ref)}</span></p>${toolsFor(q.svc,tier)?`<p class="ref">${t.toolsK}: <span dir="ltr">${esc(toolsFor(q.svc,tier))}</span></p>`:""}</div>`).join("") : `<p class="empty">${t.planNone}</p>`;
   if(r.gaps.length) h+=`<p class="fine" style="margin:8px 0 0">${esc(t.partner)}</p>`;
   const st=t.stacks[stackOf(S.profile)];
   h+=`<h2 class="h">${t.pkgH}</h2><div class="card"><p style="margin:0 0 12px"><b>${t.tierK}:</b> ${esc(t.tiers[tier])}</p><div class="rows">`+t.pkgRows.map(([k,v])=>`<div class="pkg"><b>${esc(k)}</b><span>${esc(v[tier])}</span></div>`).join("")+`</div>
