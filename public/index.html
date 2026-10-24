@@ -161,7 +161,7 @@ input[type=email],input[type=tel]{background:var(--bg);border:1px solid var(--li
 
 <div class="cta">
 <div style="flex:1;min-width:240px"><h3 data-t="ctaH"></h3><p data-t="ctaP"></p></div>
-<div class="c"><a href="https://www.alphavito.com" target="_blank" rel="noopener">www.alphavito.com</a><a href="mailto:Sales@alphavito.com">Sales@alphavito.com</a><span dir="ltr">01006527795</span></div>
+<div class="c"><a href="https://www.alphavito.com" target="_blank" rel="noopener">www.alphavito.com</a><a href="mailto:Sales@alphavito.com">Sales@alphavito.com</a><span dir="ltr">01036789734</span></div>
 </div>
 <p class="fine" data-t="fine"></p>
 </main>
@@ -560,6 +560,10 @@ const T = {
   stackK:"Suggested reference stack",stacks:{ms:["Microsoft-centric","Entra ID, Intune, Defender, Purview and Sentinel, plus a cookie tool and a request workflow. Plan the transfer licence, TIA and consent wording from day one."],local:["Local-first","On-premises or Egyptian hosting, one firewall and endpoint vendor, a SIEM (FortiSIEM, ManageEngine or Wazuh), local backup to Synology or Dell storage, registers on-premises. Avoids transfer licences."],ent:["Enterprise best-of-breed","OneTrust or Securiti, BigID or Varonis, CrowdStrike or SentinelOne, Splunk or Sentinel with 24/7 managed detection, Rubrik or Commvault, CyberArk."],sme:["SME budget","One firewall and endpoint vendor, the email platform’s built-in security, Wazuh, Veeam Community Edition or Synology Active Backup, CookieYes, a web form plus n8n for requests, PDPC templates for registers."]},
   toolsK:"Tool options",partner:"† Alphavito partner. Confirm current features, Arabic support and local availability before buying.",
   leadH:"Get your report reviewed by Alphavito",leadP:"Send your results to Alphavito and a consultant will contact you about closing the gaps.",
+  gateH:"Get your report",gateP:"Enter your name and mobile number to download the report.",gateMobile:"Mobile number",
+  gateConsent:"I agree that Alphavito stores my name, mobile number and these assessment results to contact me about PDPL services. I can ask for them to be deleted at any time by writing to Sales@alphavito.com.",
+  gateInvalid:"Enter your name and a valid Egyptian mobile number (11 digits starting with 01), and tick the consent box.",
+  phoneInvalid:"Enter a valid Egyptian mobile number (11 digits starting with 01), or leave it empty.",
   leadName:"Your name",leadEmail:"Work email",leadPhone:"Phone (optional)",
   leadConsent:"I agree that Alphavito stores my contact details and these assessment results to contact me about PDPL services. I can ask for them to be deleted at any time by writing to Sales@alphavito.com.",
   leadSend:"Send to Alphavito",leadSending:"Sending…",leadOk:"Thank you. Alphavito will contact you shortly.",leadErr:"Something went wrong. Please try again or email Sales@alphavito.com.",leadInvalid:"Enter your name and a valid email, and tick the consent box.",
@@ -592,14 +596,18 @@ const T = {
   stackK:"الحزمة التقنية المقترحة",stacks:{ms:["حزمة مايكروسوفت","Entra ID وIntune وDefender وPurview وSentinel، مع أداة للكوكيز وسير عمل للطلبات. خطط لترخيص النقل وتقييم الأثر وصيغة الموافقة من البداية."],local:["الاستضافة المحلية أولًا","استضافة داخلية أو في مصر، ومورد واحد لجدار الحماية والأجهزة، ونظام SIEM (FortiSIEM أو ManageEngine أو Wazuh)، ونسخ احتياطي محلي، وسجلات داخلية. تتجنب تراخيص النقل."],ent:["أفضل الحلول للمؤسسات","OneTrust أو Securiti، وBigID أو Varonis، وCrowdStrike أو SentinelOne، وSplunk أو Sentinel مع رصد مُدار على مدار الساعة، وRubrik أو Commvault، وCyberArk."],sme:["ميزانية الشركات الصغيرة","مورد واحد لجدار الحماية والأجهزة، وأمان منصة البريد المدمج، وWazuh، وVeeam Community أو Synology Active Backup، وCookieYes، ونموذج ويب مع n8n للطلبات، ونماذج المركز للسجلات."]},
   toolsK:"خيارات الأدوات",partner:"† شريك لألفافيتو. تأكد من الخصائص الحالية والدعم العربي والتوفر المحلي قبل الشراء.",
   leadH:"اطلب مراجعة تقريرك من ألفافيتو",leadP:"أرسل نتائجك إلى ألفافيتو وسيتواصل معك أحد المستشارين لسد الفجوات.",
+  gateH:"احصل على تقريرك",gateP:"أدخل اسمك ورقم هاتفك المحمول لتنزيل التقرير.",gateMobile:"رقم الهاتف المحمول",
+  gateConsent:"أوافق على أن تحتفظ ألفافيتو باسمي ورقم هاتفي ونتائج هذا التقييم للتواصل معي بشأن خدمات حماية البيانات، ويمكنني طلب حذفها في أي وقت بمراسلة Sales@alphavito.com.",
+  gateInvalid:"أدخل اسمك ورقم هاتف محمول مصري صحيح (11 رقمًا يبدأ بـ 01)، ووافق على الإقرار.",
+  phoneInvalid:"أدخل رقم هاتف محمول مصري صحيح (11 رقمًا يبدأ بـ 01) أو اتركه فارغًا.",
   leadName:"الاسم",leadEmail:"البريد الإلكتروني للعمل",leadPhone:"الهاتف (اختياري)",
   leadConsent:"أوافق على أن تحتفظ ألفافيتو ببيانات التواصل الخاصة بي ونتائج هذا التقييم للتواصل معي بشأن خدمات حماية البيانات، ويمكنني طلب حذفها في أي وقت بمراسلة Sales@alphavito.com.",
   leadSend:"أرسل إلى ألفافيتو",leadSending:"جارٍ الإرسال…",leadOk:"شكرًا لك. ستتواصل معك ألفافيتو قريبًا.",leadErr:"حدث خطأ. حاول مرة أخرى أو راسل Sales@alphavito.com.",leadInvalid:"أدخل اسمك وبريدًا صحيحًا، ووافق على الإقرار.",
   tg:{sensitive:["بيانات حساسة","بيانات صحية أو حيوية أو مالية أو دينية أو سياسية أو أمنية"],children:["بيانات أطفال","بيانات أي شخص دون 18 عامًا"],cloud:["سحابة أو أنظمة خارج مصر","بريد أو نظام عملاء أو نسخ احتياطي مستضاف بالخارج"],mkt:["رسائل تسويقية","بريد أو رسائل نصية أو واتساب أو مكالمات للترويج"],cctv:["كاميرات في أماكن يرتادها الجمهور","كاميرات يمكنها التعرف على العملاء أو الزوار"],web:["موقع إلكتروني أو تطبيق","يجمع بيانات شخصية أو يستخدم الكوكيز"],ai:["ذكاء اصطناعي أو تحليلات","يستخدم بيانات شخصية للذكاء الاصطناعي أو النماذج أو التقييم أو التحليلات"]}}
 };
 const KEY="pdplgap:v1";
-let S={lang:"en",step:0,profile:{company:"",sector:"other",records:"",role:"both",sensitive:false,children:false,cloud:false,mkt:false,cctv:false,web:true,ai:false},answers:{}};
-try{const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&s.profile) S=Object.assign(S,s,{profile:Object.assign(S.profile,s.profile)});}catch(e){}
+let S={lang:"en",step:0,profile:{company:"",sector:"other",records:"",role:"both",sensitive:false,children:false,cloud:false,mkt:false,cctv:false,web:true,ai:false},answers:{},lead:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&s.profile) S=Object.assign(S,s,{profile:Object.assign(S.profile,s.profile),lead:s.lead||{}});}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const L=()=>T[S.lang];
 const $=id=>document.getElementById(id);
@@ -679,26 +687,48 @@ function renderResults(){
    <label class="f"><span>${t.leadPhone}</span><input type="tel" name="phone" autocomplete="tel" maxlength="40" dir="ltr"></label></div>
    <label class="tg" style="margin-top:14px"><input type="checkbox" name="consent" required><span>${esc(t.leadConsent)}</span></label>
    <div class="actions"><span id="leadmsg" class="empty" role="status"></span><button class="btn primary" type="submit">${t.leadSend}</button></div></form>`;
-  h+=`<div class="actions"><span id="dlmsg" class="empty"></span><button class="btn primary" id="dl" type="button" hidden>${t.download}</button></div>`;
+  h+=`<div class="actions"><span id="dlmsg" class="empty" role="status"></span><button class="btn primary" id="dl" type="button">${t.download}</button></div>
+  <form class="card" id="gate" hidden novalidate style="margin-top:12px"><h3 style="margin:0 0 6px">${t.gateH}</h3><p class="empty" style="margin:0 0 14px">${esc(t.gateP)}</p><div class="grid2">
+   <label class="f"><span>${t.leadName}</span><input type="text" name="name" autocomplete="name" maxlength="120" required value="${esc(S.lead.name||"")}"></label>
+   <label class="f"><span>${t.gateMobile}</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="20" required dir="ltr" placeholder="01xxxxxxxxx" value="${esc(S.lead.phone||"")}"></label></div>
+   <label class="tg" style="margin-top:14px"><input type="checkbox" name="consent" required><span>${esc(t.gateConsent)}</span></label>
+   <div class="actions"><span id="gatemsg" class="empty" role="status"></span><button class="btn primary" type="submit">${t.download}</button></div></form>`;
   $("results").innerHTML=h; setupDownload(r); setupLead(r);
 }
+// Egyptian mobile: 11 digits starting 010/011/012/015. Accepts Arabic digits, spaces and +20.
+function normPhone(v){ return String(v||"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[\s\-().]/g,"").replace(/^(\+|00)?20(?=1)/,"0"); }
+const isMobile=v=>/^01[0125]\d{8}$/.test(v);
+async function sendLead(extra,r){
+  const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(Object.assign({consent:true,lang:S.lang,profile:S.profile,answers:S.answers,score:r.score,gaps:r.gaps.map(q=>q.id)},extra))});
+  if(!res.ok) throw new Error(res.status);
+}
 function setupLead(r){ const f=$("lead"); if(!f) return; const msg=$("leadmsg");
-  f.onsubmit=async e=>{ e.preventDefault(); const t=L(), d=Object.fromEntries(new FormData(f));
+  f.onsubmit=async e=>{ e.preventDefault(); const t=L(), d=Object.fromEntries(new FormData(f)), phone=normPhone(d.phone);
     if(!d.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())||!d.consent){ msg.textContent=t.leadInvalid; return; }
+    if(phone&&!isMobile(phone)){ msg.textContent=t.phoneInvalid; return; }
     const btn=f.querySelector("button"); btn.disabled=true; msg.textContent=t.leadSending;
-    try{ const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({name:d.name.trim(),email:d.email.trim(),phone:(d.phone||"").trim(),consent:true,lang:S.lang,profile:S.profile,answers:S.answers,score:r.score,gaps:r.gaps.map(q=>q.id)})});
-      if(!res.ok) throw new Error(res.status); msg.textContent=t.leadOk; f.querySelectorAll("input").forEach(i=>i.disabled=true); }
+    try{ await sendLead({source:"contact",name:d.name.trim(),email:d.email.trim(),phone},r);
+      if(phone){ S.lead={name:d.name.trim(),phone}; save(); }
+      msg.textContent=t.leadOk; f.querySelectorAll("input").forEach(i=>i.disabled=true); }
     catch(err){ msg.textContent=t.leadErr; btn.disabled=false; } };
 }
 let DL=null;
-async function setupDownload(r){ const btn=$("dl"); if(!btn) return;
+async function saveReport(){ const data=new Blob([reportHTML(compute())],{type:"text/html"}), name="PDPL-readiness-report.html";
   if(DL===null&&window.claude&&window.claude.use){ try{ DL=await window.claude.use("downloads"); }catch(e){ DL=false; } }
-  if(!DL){ btn.hidden=false; btn.onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([reportHTML(compute())],{type:"text/html"}));
-    a.download="PDPL-readiness-report.html"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }; return; }
-  btn.hidden=false;
-  btn.onclick=async()=>{ try{ await DL.save({filename:"PDPL-readiness-report.html",data:new Blob([reportHTML(compute())],{type:"text/html"})}); }
-   catch(e){ $("dlmsg").textContent = (e&&(e.code==="declined"))?"":(e&&(e.code==="unavailable"||e.code==="not_granted"))?L().dlNo:L().dlFail; } };
+  if(DL){ try{ await DL.save({filename:name,data}); }
+    catch(e){ $("dlmsg").textContent=(e&&e.code==="declined")?"":(e&&(e.code==="unavailable"||e.code==="not_granted"))?L().dlNo:L().dlFail; } return; }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(data); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+// The report is only handed over once the visitor has sent a name and mobile number.
+function setupDownload(r){ const btn=$("dl"), g=$("gate"); if(!btn||!g) return; const msg=$("gatemsg");
+  btn.onclick=()=>{ if(S.lead&&isMobile(S.lead.phone||"")) return saveReport(); g.hidden=false; g.querySelector("input").focus(); };
+  g.onsubmit=async e=>{ e.preventDefault(); const t=L(), d=Object.fromEntries(new FormData(g)), name=d.name.trim(), phone=normPhone(d.phone);
+    if(!name||!isMobile(phone)||!d.consent){ msg.textContent=t.gateInvalid; return; }
+    const b=g.querySelector("button"); b.disabled=true; msg.textContent=t.leadSending;
+    try{ await sendLead({source:"download",name,phone},r); S.lead={name,phone}; save(); g.hidden=true; msg.textContent=""; await saveReport(); }
+    catch(err){ msg.textContent=t.leadErr; }
+    b.disabled=false; };
 }
 function reportHTML(r){ const t=L(), ar=S.lang==="ar", d=new Date().toISOString().slice(0,10);
   const rows=SECTIONS.filter(s=>r.bySec[s.id]).map(s=>`<tr><td>${esc(s[S.lang])}</td><td>${Math.round(r.bySec[s.id].g/r.bySec[s.id].w*100)}%</td></tr>`).join("");
@@ -711,7 +741,7 @@ function reportHTML(r){ const t=L(), ar=S.lang==="ar", d=new Date().toISOString(
   <h2>${t.plan}</h2>${r.gaps.length?`<table><tr><th>${t.pr[3].replace(/.*/,ar?"الأولوية":"Priority")}</th><th>${ar?"التوقيت":"Timing"}</th><th>${ar?"الإجراء":"Action"}</th><th>${t.ref}</th></tr>${acts}</table>`:`<p>${t.planNone}</p>`}
   <h2>${t.pkgH} — ${esc(t.tiers[tierOf(S.profile.records)])}</h2><table>${t.pkgRows.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v[tierOf(S.profile.records)])}</td></tr>`).join("")}</table>
   <p><b>${t.stackK}: ${esc(t.stacks[stackOf(S.profile)][0])}</b> — ${esc(t.stacks[stackOf(S.profile)][1])}</p>
-  <p class="k">${t.fine}</p><p>Alphavito Technology Solutions · www.alphavito.com · Sales@alphavito.com · 01006527795</p></body></html>`; }
+  <p class="k">${t.fine}</p><p>Alphavito Technology Solutions · www.alphavito.com · Sales@alphavito.com · 01036789734</p></body></html>`; }
 function go(i,quiet){ S.step=i; save(); document.querySelectorAll(".panel").forEach((p,k)=>p.classList.toggle("on",k===i));
   document.querySelectorAll(".step").forEach((b,k)=>b.setAttribute("aria-current",k===i?"step":"false"));
   if(i===1) renderQs(); if(i===2) renderResults(); if(!quiet) window.scrollTo({top:document.querySelector(".steps").offsetTop-10,behavior:"smooth"}); }
