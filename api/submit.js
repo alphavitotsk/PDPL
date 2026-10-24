@@ -38,8 +38,8 @@ async function notify(lead) {
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       signal: AbortSignal.timeout(5000),
       body: JSON.stringify({
-        from: process.env.LEAD_FROM || "PDPL Readiness Check <pdpl@alphavito.com>",
-        to: (process.env.LEAD_NOTIFY_TO || "Sales@alphavito.com").split(",").map((x) => x.trim()),
+        from: process.env.LEAD_FROM || "PDPL Readiness Check <noreply@alphavito.com>",
+        to: (process.env.LEAD_NOTIFY_TO || "pdpl@alphavito.com").split(",").map((x) => x.trim()),
         reply_to: lead.email || undefined,
         subject: `PDPL lead: ${lead.name}${lead.profile.company ? ` (${lead.profile.company})` : ""} — ${lead.score}%`,
         html,
