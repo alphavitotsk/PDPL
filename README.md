@@ -8,6 +8,7 @@ Bilingual (English / Arabic) self-assessment for Egypt's Personal Data Protectio
 
 ## Deploy
 
+- Live at https://pdpl.alphavito.com (CNAME `pdpl` → Vercel, DNS at Hostinger).
 - Vercel project `pdpl-readiness` in the **alphavitotsk** account, linked to this repo. Every push to the
   production branch (`claude/nice-lamport-aqr9o9`, the repo default) deploys automatically.
 - Settings: no framework, no build command, output directory `public`, functions in `fra1`.
