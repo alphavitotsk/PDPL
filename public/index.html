@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PDPL Readiness Check — Alphavito</title>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9JL230B4E2"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());
+gtag('config','G-9JL230B4E2');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -744,6 +751,7 @@ async function sendLead(extra,r){
   const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify(Object.assign({consent:true,lang:S.lang,profile:S.profile,answers:S.answers,score:r.score,gaps:r.gaps.map(q=>q.id)},extra))});
   if(!res.ok) throw new Error(res.status);
+  if(window.gtag) gtag('event','pdpl_lead_submitted',{source:extra.source,score:r.score,lang:S.lang});
 }
 function setupLead(r){ const f=$("lead"); if(!f) return; const msg=$("leadmsg");
   f.onsubmit=async e=>{ e.preventDefault(); const t=L(), d=Object.fromEntries(new FormData(f)), phone=normPhone(d.phone);
@@ -784,9 +792,12 @@ function reportHTML(r){ const t=L(), ar=S.lang==="ar", d=new Date().toISOString(
   <h2>${t.pkgH} — ${esc(t.tiers[tierOf(S.profile.records)])}</h2><table>${t.pkgRows.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v[tierOf(S.profile.records)])}</td></tr>`).join("")}</table>
   <p><b>${t.stackK}: ${esc(t.stacks[stackOf(S.profile)][0])}</b> — ${esc(t.stacks[stackOf(S.profile)][1])}</p>
   <p class="k">${t.fine}</p><p>Alphavito Technology Solutions · www.alphavito.com · pdpl@alphavito.com · 01036789734</p></body></html>`; }
+let GA_STARTED=false, GA_COMPLETED=false;
 function go(i,quiet){ S.step=i; save(); document.querySelectorAll(".panel").forEach((p,k)=>p.classList.toggle("on",k===i));
   document.querySelectorAll(".step").forEach((b,k)=>b.setAttribute("aria-current",k===i?"step":"false"));
-  if(i===1) renderQs(); if(i===2) renderResults(); if(!quiet) window.scrollTo({top:document.querySelector(".steps").offsetTop-10,behavior:"smooth"}); }
+  if(i===1){ renderQs(); if(window.gtag&&!GA_STARTED){ GA_STARTED=true; gtag('event','pdpl_quiz_started',{lang:S.lang}); } }
+  if(i===2){ renderResults(); if(window.gtag&&!GA_COMPLETED){ GA_COMPLETED=true; gtag('event','pdpl_quiz_completed',{lang:S.lang,score:compute().score}); } }
+  if(!quiet) window.scrollTo({top:document.querySelector(".steps").offsetTop-10,behavior:"smooth"}); }
 document.addEventListener("click",e=>{ const g=e.target.closest("[data-go]"); if(g){ go(+g.dataset.go); return; }
   const a=e.target.closest(".ans button"); if(a){ S.answers[a.dataset.q]=a.dataset.v; save();
     a.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b===a)); progress(); } });
